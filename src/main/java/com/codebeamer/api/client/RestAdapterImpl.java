@@ -30,21 +30,21 @@ public class RestAdapterImpl implements RestAdapter {
 
     private HttpClient client;
     private RequestConfig requestConfig;
-    private String baseUrl;
+    private Configuration configuration;
 
     private static final int timeout = 500;
     private static final String REST_PATH = "/rest";
 
-    public RestAdapterImpl(String username, String password, String baseUrl) {
-        this.baseUrl = baseUrl;
-        this.client = buildHttpClient(username, password);
+    public RestAdapterImpl(Configuration config) {
+        this.configuration = config;
+        this.client = buildHttpClient();
         this.requestConfig =  buildRequestConfig();
     }
 
-    private  HttpClient buildHttpClient(String username, String password) {
+    private  HttpClient buildHttpClient() {
         return HttpClientBuilder
                 .create()
-                .setDefaultHeaders(getDefaultHeaders(username, password))
+                .setDefaultHeaders(getDefaultHeaders(configuration.getUsername(), configuration.getPassword()))
                 .build();
     }
 
@@ -70,7 +70,7 @@ public class RestAdapterImpl implements RestAdapter {
 
     @Override
     public String getVersion() throws ConnectTimeoutException, InvalidCredentialsException {
-        return executeGet(baseUrl + REST_PATH + "/version");
+        return executeGet(configuration.getUri() + REST_PATH + "/version");
     }
 
     private String executeGet(String uri) throws ConnectTimeoutException, InvalidCredentialsException {
@@ -87,6 +87,8 @@ public class RestAdapterImpl implements RestAdapter {
         } catch (IOException ex) {
             logger.debug(ex);
             throw new ConnectTimeoutException("connection to " + uri + " timed out");
+        } finally {
+            get.releaseConnection();
         }
     }
 }

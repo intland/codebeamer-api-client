@@ -26,14 +26,17 @@ public class RestAdapterImplTest {
     }
 
     private RestAdapter getRestAdapterWithCorrectEndpointAndCredentials() {
-        return new RestAdapterImpl("bond", "007", "http://10.200.10.1:8080/cb");
+        Configuration config = new Configuration("http://10.200.10.1:8080/cb", "bond", "007");
+        return new RestAdapterImpl(config);
     }
 
     private RestAdapter getRestAdapterWithCorrectEndpointAndIncorrectCredentials() {
-        return new RestAdapterImpl("bond", "invalid", "http://10.200.10.1:8080/cb");
+        Configuration config = new Configuration("http://10.200.10.1:8080/cb", "bond", "invalid");
+        return new RestAdapterImpl(config);
     }
 
     private RestAdapter getRestAdapterWithIncorrectEndpoint() {
-        return new RestAdapterImpl("bond", "invalid", "http://0.0.0.0:10000");
+        Configuration config = new Configuration("http://0.0.0.0:10000", "bond", "007");
+        return new RestAdapterImpl(config);
     }
 }

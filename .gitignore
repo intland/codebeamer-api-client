@@ -1,0 +1,12 @@
+# Gradle
+.gradle
+/build/
+
+# Intellij Idea
+# User-specific stuff:
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/dictionaries
+# Gradle:
+.idea/**/gradle.xml
+.idea/**/libraries

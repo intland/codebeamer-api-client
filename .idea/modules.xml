@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/codebeamer-api-client.iml" filepath="$PROJECT_DIR$/.idea/modules/codebeamer-api-client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/codebeamer-api-client_main.iml" filepath="$PROJECT_DIR$/.idea/modules/codebeamer-api-client_main.iml" group="codebeamer-api-client" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/codebeamer-api-client_test.iml" filepath="$PROJECT_DIR$/.idea/modules/codebeamer-api-client_test.iml" group="codebeamer-api-client" />
+    </modules>
+  </component>
+</project>

@@ -34,6 +34,6 @@ public class RestAdapterImplTest {
     }
 
     private RestAdapter getRestAdapterWithIncorrectEndpoint() {
-        return new RestAdapterImpl("bond", "invalid", "http://0.0.0.0:8080");
+        return new RestAdapterImpl("bond", "invalid", "http://0.0.0.0:10000");
     }
 }

@@ -26,11 +26,11 @@ public class RestAdapterImplTest {
     }
 
     private RestAdapter getRestAdapterWithCorrectEndpointAndCredentials() {
-        return new RestAdapterImpl("bond", "007", "http://localhost:8080/cb");
+        return new RestAdapterImpl("bond", "007", "http://10.200.10.1:8080/cb");
     }
 
     private RestAdapter getRestAdapterWithCorrectEndpointAndIncorrectCredentials() {
-        return new RestAdapterImpl("bond", "invalid", "http://localhost:8080/cb");
+        return new RestAdapterImpl("bond", "invalid", "http://10.200.10.1:8080/cb");
     }
 
     private RestAdapter getRestAdapterWithIncorrectEndpoint() {

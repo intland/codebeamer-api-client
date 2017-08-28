@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.intland.codebeamer.remoting.test.TrackerItemRemotingTests" tests="8" skipped="0" failures="0" errors="0" timestamp="2017-08-24T06:15:09" hostname="Martins-MBP.fritz.box" time="273.686">
+  <properties/>
+  <testcase name="testCrud" classname="com.intland.codebeamer.remoting.test.TrackerItemRemotingTests" time="36.639"/>
+  <testcase name="testFinders" classname="com.intland.codebeamer.remoting.test.TrackerItemRemotingTests" time="33.934"/>
+  <testcase name="testCreateSetDeletedAndUpdate" classname="com.intland.codebeamer.remoting.test.TrackerItemRemotingTests" time="34.08"/>
+  <testcase name="testCreateRemoveAndDelete" classname="com.intland.codebeamer.remoting.test.TrackerItemRemotingTests" time="31.193"/>
+  <testcase name="testAddAttachmentWithMultipleFiles" classname="com.intland.codebeamer.remoting.test.TrackerItemRemotingTests" time="37.621"/>
+  <testcase name="testCustomFields" classname="com.intland.codebeamer.remoting.test.TrackerItemRemotingTests" time="29.853"/>
+  <testcase name="testHistory" classname="com.intland.codebeamer.remoting.test.TrackerItemRemotingTests" time="34.534"/>
+  <testcase name="testStats" classname="com.intland.codebeamer.remoting.test.TrackerItemRemotingTests" time="35.827"/>
+  <system-out><![CDATA[15:10,068 INFO  remoting.test.AbstractRemotingTests     - Trying to connecting to remote url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+15:10,103 INFO  remoting.test.AbstractRemotingTests     - Successfully connected to url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+15:46,615 INFO  remoting.test.AbstractRemotingTests     - Trying to connecting to remote url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+15:46,672 INFO  remoting.test.AbstractRemotingTests     - Successfully connected to url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+16:20,538 INFO  remoting.test.AbstractRemotingTests     - Trying to connecting to remote url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+16:20,554 INFO  remoting.test.AbstractRemotingTests     - Successfully connected to url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+16:54,606 INFO  remoting.test.AbstractRemotingTests     - Trying to connecting to remote url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+16:54,630 INFO  remoting.test.AbstractRemotingTests     - Successfully connected to url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+17:25,798 INFO  remoting.test.AbstractRemotingTests     - Trying to connecting to remote url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+17:25,817 INFO  remoting.test.AbstractRemotingTests     - Successfully connected to url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+18:03,420 INFO  remoting.test.AbstractRemotingTests     - Trying to connecting to remote url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+18:03,461 INFO  remoting.test.AbstractRemotingTests     - Successfully connected to url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+18:33,272 INFO  remoting.test.AbstractRemotingTests     - Trying to connecting to remote url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+18:33,303 INFO  remoting.test.AbstractRemotingTests     - Successfully connected to url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+19:07,819 INFO  remoting.test.AbstractRemotingTests     - Trying to connecting to remote url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+19:07,864 INFO  remoting.test.AbstractRemotingTests     - Successfully connected to url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

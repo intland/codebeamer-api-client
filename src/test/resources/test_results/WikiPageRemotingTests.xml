@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.intland.codebeamer.remoting.test.WikiPageRemotingTests" tests="4" skipped="0" failures="0" errors="0" timestamp="2017-08-24T06:12:55" hostname="Martins-MBP.fritz.box" time="134.44">
+  <properties/>
+  <testcase name="testCrud" classname="com.intland.codebeamer.remoting.test.WikiPageRemotingTests" time="28.652"/>
+  <testcase name="testFinders" classname="com.intland.codebeamer.remoting.test.WikiPageRemotingTests" time="29.757"/>
+  <testcase name="testUploadDownload" classname="com.intland.codebeamer.remoting.test.WikiPageRemotingTests" time="29.672"/>
+  <testcase name="testRenderContent" classname="com.intland.codebeamer.remoting.test.WikiPageRemotingTests" time="46.358"/>
+  <system-out><![CDATA[12:55,577 INFO  remoting.test.AbstractRemotingTests     - Trying to connecting to remote url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+12:55,743 INFO  remoting.test.AbstractRemotingTests     - Successfully connected to url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+13:07,452 INFO  remoting.test.WikiPageRemotingTests     - Using base-url:http://10.200.10.1:10211/cb [Test worker] {}
+13:24,161 INFO  remoting.test.AbstractRemotingTests     - Trying to connecting to remote url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+13:24,196 INFO  remoting.test.AbstractRemotingTests     - Successfully connected to url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+13:53,916 INFO  remoting.test.AbstractRemotingTests     - Trying to connecting to remote url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+13:54,038 INFO  remoting.test.AbstractRemotingTests     - Successfully connected to url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+14:23,599 INFO  remoting.test.AbstractRemotingTests     - Trying to connecting to remote url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+14:23,653 INFO  remoting.test.AbstractRemotingTests     - Successfully connected to url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

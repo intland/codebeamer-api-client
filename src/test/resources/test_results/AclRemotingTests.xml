@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.intland.codebeamer.remoting.test.AclRemotingTests" tests="2" skipped="0" failures="0" errors="0" timestamp="2017-08-24T06:07:12" hostname="Martins-MBP.fritz.box" time="52.313">
+  <properties/>
+  <testcase name="testRoleFinders" classname="com.intland.codebeamer.remoting.test.AclRemotingTests" time="27.292"/>
+  <testcase name="testProjectRoleManagement" classname="com.intland.codebeamer.remoting.test.AclRemotingTests" time="25.02"/>
+  <system-out><![CDATA[07:12,790 INFO  remoting.test.AbstractRemotingTests     - Trying to connecting to remote url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+07:12,826 INFO  remoting.test.AbstractRemotingTests     - Successfully connected to url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+07:40,055 INFO  remoting.test.AbstractRemotingTests     - Trying to connecting to remote url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+07:40,102 INFO  remoting.test.AbstractRemotingTests     - Successfully connected to url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

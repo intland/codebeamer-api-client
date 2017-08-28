@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.intland.codebeamer.remoting.test.ArtifactRemotingTests" tests="10" skipped="0" failures="0" errors="0" timestamp="2017-08-24T06:08:05" hostname="Martins-MBP.fritz.box" time="290.455">
+  <properties/>
+  <testcase name="testCrud" classname="com.intland.codebeamer.remoting.test.ArtifactRemotingTests" time="26.974"/>
+  <testcase name="testDeprecatedCrud" classname="com.intland.codebeamer.remoting.test.ArtifactRemotingTests" time="30.674"/>
+  <testcase name="testDownloadRevision" classname="com.intland.codebeamer.remoting.test.ArtifactRemotingTests" time="29.382"/>
+  <testcase name="testDeprecatedUpAndDownload" classname="com.intland.codebeamer.remoting.test.ArtifactRemotingTests" time="64.529"/>
+  <testcase name="testFinders" classname="com.intland.codebeamer.remoting.test.ArtifactRemotingTests" time="30.87"/>
+  <testcase name="testUploadDownload" classname="com.intland.codebeamer.remoting.test.ArtifactRemotingTests" time="32.748"/>
+  <testcase name="testUploadTemporary" classname="com.intland.codebeamer.remoting.test.ArtifactRemotingTests" time="12.913"/>
+  <testcase name="testDocumentApprovalWorkflow" classname="com.intland.codebeamer.remoting.test.ArtifactRemotingTests" time="0.087"/>
+  <testcase name="testSoftLocking" classname="com.intland.codebeamer.remoting.test.ArtifactRemotingTests" time="30.489"/>
+  <testcase name="testHardLocking" classname="com.intland.codebeamer.remoting.test.ArtifactRemotingTests" time="31.78"/>
+  <system-out><![CDATA[08:05,144 INFO  remoting.test.AbstractRemotingTests     - Trying to connecting to remote url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+08:05,178 INFO  remoting.test.AbstractRemotingTests     - Successfully connected to url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+08:32,044 INFO  remoting.test.AbstractRemotingTests     - Trying to connecting to remote url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+08:32,090 INFO  remoting.test.AbstractRemotingTests     - Successfully connected to url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+09:02,700 INFO  remoting.test.AbstractRemotingTests     - Trying to connecting to remote url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+09:02,752 INFO  remoting.test.AbstractRemotingTests     - Successfully connected to url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+09:32,094 INFO  remoting.test.AbstractRemotingTests     - Trying to connecting to remote url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+09:32,163 INFO  remoting.test.AbstractRemotingTests     - Successfully connected to url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+10:36,643 INFO  remoting.test.AbstractRemotingTests     - Trying to connecting to remote url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+10:36,752 INFO  remoting.test.AbstractRemotingTests     - Successfully connected to url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+11:07,489 INFO  remoting.test.AbstractRemotingTests     - Trying to connecting to remote url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+11:07,532 INFO  remoting.test.AbstractRemotingTests     - Successfully connected to url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+11:40,258 INFO  remoting.test.AbstractRemotingTests     - Trying to connecting to remote url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+11:40,289 INFO  remoting.test.AbstractRemotingTests     - Successfully connected to url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+11:53,150 INFO  remoting.test.AbstractRemotingTests     - Trying to connecting to remote url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+11:53,179 INFO  remoting.test.AbstractRemotingTests     - Successfully connected to url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+11:54,136 INFO  remoting.test.AbstractRemotingTests     - Trying to connecting to remote url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+11:54,156 INFO  remoting.test.AbstractRemotingTests     - Successfully connected to url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+12:23,730 INFO  remoting.test.AbstractRemotingTests     - Trying to connecting to remote url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+12:23,761 INFO  remoting.test.AbstractRemotingTests     - Successfully connected to url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

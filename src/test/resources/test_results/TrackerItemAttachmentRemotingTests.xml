@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.intland.codebeamer.remoting.test.TrackerItemAttachmentRemotingTests" tests="2" skipped="0" failures="0" errors="0" timestamp="2017-08-24T06:19:43" hostname="Martins-MBP.fritz.box" time="69.084">
+  <properties/>
+  <testcase name="testCrud" classname="com.intland.codebeamer.remoting.test.TrackerItemAttachmentRemotingTests" time="36.448"/>
+  <testcase name="testFinders" classname="com.intland.codebeamer.remoting.test.TrackerItemAttachmentRemotingTests" time="32.635"/>
+  <system-out><![CDATA[19:43,746 INFO  remoting.test.AbstractRemotingTests     - Trying to connecting to remote url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+19:43,765 INFO  remoting.test.AbstractRemotingTests     - Successfully connected to url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+20:20,095 INFO  remoting.test.AbstractRemotingTests     - Trying to connecting to remote url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+20:20,126 INFO  remoting.test.AbstractRemotingTests     - Successfully connected to url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

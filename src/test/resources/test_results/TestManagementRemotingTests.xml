@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.intland.codebeamer.remoting.test.TestManagementRemotingTests" tests="2" skipped="0" failures="0" errors="0" timestamp="2017-08-24T06:20:52" hostname="Martins-MBP.fritz.box" time="131.483">
+  <properties/>
+  <testcase name="testTestManagementRemotingMethodsWithPassed" classname="com.intland.codebeamer.remoting.test.TestManagementRemotingTests" time="66.474"/>
+  <testcase name="testTestManagementRemotingMethodsWithFailed" classname="com.intland.codebeamer.remoting.test.TestManagementRemotingTests" time="65.007"/>
+  <system-out><![CDATA[20:52,834 INFO  remoting.test.AbstractRemotingTests     - Trying to connecting to remote url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+20:52,871 INFO  remoting.test.AbstractRemotingTests     - Successfully connected to url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+21:15,401 INFO  remoting.test.AbstractTestManagementRemotingTests     - Result:[<Passed(id=1, offset=1, labelId=15)>] [Test worker] {}
+21:16,211 INFO  remoting.test.AbstractTestManagementRemotingTests     - Result:[<Passed(id=1, offset=1, labelId=15)>] [Test worker] {}
+21:16,898 INFO  remoting.test.AbstractTestManagementRemotingTests     - Result:[<Passed(id=1, offset=1, labelId=15)>] [Test worker] {}
+21:17,573 INFO  remoting.test.AbstractTestManagementRemotingTests     - Result:[<Passed(id=1, offset=1, labelId=15)>] [Test worker] {}
+21:19,277 INFO  remoting.test.AbstractTestManagementRemotingTests     - Result:[<Passed(id=1, offset=1, labelId=15)>] [Test worker] {}
+21:19,408 INFO  remoting.test.AbstractTestManagementRemotingTests     - Result:[<Passed(id=1, offset=1, labelId=15)>] [Test worker] {}
+21:59,211 INFO  remoting.test.AbstractRemotingTests     - Trying to connecting to remote url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+21:59,268 INFO  remoting.test.AbstractRemotingTests     - Successfully connected to url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+22:20,748 INFO  remoting.test.AbstractTestManagementRemotingTests     - Result:[<Failed(id=2, offset=2, labelId=15)>] [Test worker] {}
+22:21,500 INFO  remoting.test.AbstractTestManagementRemotingTests     - Result:[<Failed(id=2, offset=2, labelId=15)>] [Test worker] {}
+22:22,158 INFO  remoting.test.AbstractTestManagementRemotingTests     - Result:[<Failed(id=2, offset=2, labelId=15)>] [Test worker] {}
+22:22,874 INFO  remoting.test.AbstractTestManagementRemotingTests     - Result:[<Failed(id=2, offset=2, labelId=15)>] [Test worker] {}
+22:24,615 INFO  remoting.test.AbstractTestManagementRemotingTests     - Result:[<Failed(id=2, offset=2, labelId=15)>] [Test worker] {}
+22:24,730 INFO  remoting.test.AbstractTestManagementRemotingTests     - Result:[<Failed(id=2, offset=2, labelId=15)>] [Test worker] {}
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.intland.codebeamer.remoting.test.GeneralRemotingTests" tests="5" skipped="0" failures="0" errors="0" timestamp="2017-08-24T06:06:43" hostname="Martins-MBP.fritz.box" time="28.945">
+  <properties/>
+  <testcase name="testServerInfo" classname="com.intland.codebeamer.remoting.test.GeneralRemotingTests" time="28.074"/>
+  <testcase name="testErrorHandling" classname="com.intland.codebeamer.remoting.test.GeneralRemotingTests" time="0.353"/>
+  <testcase name="testExceptionSerialization" classname="com.intland.codebeamer.remoting.test.GeneralRemotingTests" time="0.207"/>
+  <testcase name="testLoginFail" classname="com.intland.codebeamer.remoting.test.GeneralRemotingTests" time="0.134"/>
+  <testcase name="testHessianProxy" classname="com.intland.codebeamer.remoting.test.GeneralRemotingTests" time="0.177"/>
+  <system-out><![CDATA[06:43,811 INFO  remoting.test.GeneralRemotingTests     - Loading context for locations: classpath:applicationContext.xml,classpath:testContext.xml [Test worker] {}
+06:50,584 WARN  config.http.MatcherType     - 'path-type' is deprecated. Please use 'request-matcher' instead. [Test worker] {}
+06:54,033 INFO  codebeamer.test.AbstractCodeBeamerTests$2     - Refreshing com.intland.codebeamer.test.AbstractCodeBeamerTests$2@47e8acb8: startup date [Thu Aug 24 08:06:54 CEST 2017]; root of context hierarchy [Test worker] {}
+06:57,306 INFO  utils.ehcache.AlwaysAliveEhCacheManagerFactoryBean     - Initializing EhCache CacheManager [Test worker] {}
+06:57,560 INFO  codebeamer.servlet.CBPaths     - CBPAths.codebeamer.home is:/Users/mgansler/intland/cbdev/gradle/zk/cb/build/deployments/unittest, tries to discover if missing:false [Test worker] {}
+06:57,567 INFO  codebeamer.servlet.CBPaths     - Repository directoy </Users/mgansler/intland/cbdev/gradle/zk/cb/build/deployments/unittest/repository> exists: true [Test worker] {}
+06:57,585 INFO  com.intland.codebeamer     - Host-id is <MAC-78:4F:43:85:DD:E7> [Test worker] {}
+06:58,029 WARN  codebeamer.license.AutoTestLicenseGenerator     - Changing to use auto-generted License for tests:
+<license code="4F9D766CC581CEB2" expire="Feb-01-3333" generatorUser="AutoTestLicenseGenerator class" hostid="MAC-78:4F:43:85:DD:E7">
+    <product type="ALM +Escalation +Document Approval">
+        <user kind="floating" licenses="9999" type="user"/>
+        <user kind="named" licenses="9998" type="user"/>
+    </product>
+    <product type="CM +Escalation +Document Approval">
+        <user kind="floating" licenses="9999" type="user"/>
+        <user kind="named" licenses="9998" type="user"/>
+    </product>
+</license>
+, previous license:
+<license code="6AC0537B6C466E74" expire="Aug-31-2017" hostid="EVAL">
+    <constraint name="projects" value="1"/>
+    <product type="ALM">
+        <user kind="named" licenses="25" type="user"/>
+    </product>
+    <product type="Collab">
+        <user kind="named" licenses="75" type="user"/>
+    </product>
+</license>
+ [Test worker] {}
+06:58,048 INFO  persistence.rdbms.DataSourceFactory     - Lookup for JDBC url <jdbc:mysql://10.200.10.1:10212/codebeamer?autoReconnect=true&zeroDateTimeBehavior=convertToNull&emulateLocators=true&characterEncoding=UTF-8&useSSL=false> [Test worker] {}
+06:58,118 INFO  persistence.rdbms.DbServerInfo     - Host <10.200.10.1> port <10212> name <codebeamer> connectionURL <jdbc:mysql://10.200.10.1:10212/codebeamer?autoReconnect=true&zeroDateTimeBehavior=convertToNull&emulateLocators=true&characterEncoding=UTF-8&useSSL=false>, schema:<root> [Test worker] {}
+06:58,124 INFO  rdbms.mysql.MySqlDatabaseProvider     - MySQL server is already running on 10212 [Test worker] {}
+06:58,744 INFO  persistence.rdbms.DataSourceFactory     - Database: MySQL-5.7.19 [Test worker] {}
+06:58,744 INFO  persistence.rdbms.DataSourceFactory     - Driver: MySQL Connector Java mysql-connector-java-5.1.40 ( Revision: 402933ef52cad9aa82624e80acbea46e3a701ce6 ) [Test worker] {}
+06:58,745 INFO  persistence.rdbms.DataSourceFactory     - URL: <jdbc:mysql://10.200.10.1:10212/codebeamer?autoReconnect=true&zeroDateTimeBehavior=convertToNull&emulateLocators=true&characterEncoding=UTF-8&useSSL=false [Test worker] {}
+06:58,818 INFO  persistence.rdbms.DatabaseSchemaValidator     - Version-main: <8.3> db-major: <8.3> version-minor: <.0> db-minor: <.0> [Test worker] {}
+06:58,818 INFO  persistence.rdbms.DatabaseSchemaValidator     - No database upgrade is necessary. [Test worker] {}
+06:59,085 INFO  security.ipfilter.DefaultDNSResolver     - Hostname: <martins-mbp.fritz.box> [Test worker] {}
+07:02,320 WARN  ehcache.config.CacheConfiguration     - Cache 'project-baseline-cache' is set to eternal but also has TTI/TTL set.  To avoid this warning, clean up the config removing conflicting values of eternal, TTI and TTL. Effective configuration for Cache 'project-baseline-cache' will be eternal='true', timeToIdleSeconds='0', timeToLiveSeconds='0'. [Test worker] {}
+07:02,485 INFO  intland.codebeamer.Config     - Startup: Thu Aug 24 08:07:02 CEST 2017 user <mgansler> [Test worker] {}
+07:02,485 INFO  intland.codebeamer.Config     - 8.3.0 (build date: August 24 2017 08:03) [Test worker] {}
+07:02,485 INFO  intland.codebeamer.Config     - OS: Mac OS X Version: 10.12.6 [Test worker] {}
+07:02,485 INFO  intland.codebeamer.Config     - JVM: Oracle Corporation;1.8.0_131;25.131-b11; Java HotSpot(TM) 64-Bit Server VM; [Test worker] {}
+07:02,486 INFO  intland.codebeamer.Config     - java.io.tmpdir: </Users/mgansler/intland/cbdev/gradle/zk/cb/build/deployments/unittest/java_tmp> [Test worker] {}
+07:02,487 INFO  codebeamer.config.ConfigUtils     - Directory checked - it is writable: /Users/mgansler/intland/cbdev/gradle/zk/cb/build/deployments/unittest/java_tmp [Test worker] {}
+07:02,487 INFO  codebeamer.config.ConfigUtils     - Loading /Users/mgansler/intland/cbdev/gradle/zk/cb/build/resources/test/general.xml, exists: true [Test worker] {}
+07:02,520 INFO  intland.codebeamer.Config     - Loading my-general.xml from classpath. [Test worker] {}
+07:02,538 INFO  codebeamer.config.ConfigUtils     - Loading /Users/mgansler/intland/cbdev/gradle/zk/cb/build/deployments/unittest/tomcat/conf/server.xml, exists: true [Test worker] {}
+07:02,544 INFO  intland.codebeamer.Config     - SSL port is: 8443 [Test worker] {}
+07:02,645 INFO  intland.codebeamer.Config     - registration:  [Test worker] {}
+07:02,645 INFO  intland.codebeamer.Config     - defaultNewAccountRole: <user> [Test worker] {}
+07:02,645 INFO  intland.codebeamer.Config     - notificationSender: <null> [Test worker] {}
+07:02,646 INFO  intland.codebeamer.Config     - cookiesAllowed: true forgetCookies: true [Test worker] {}
+07:02,646 INFO  intland.codebeamer.Config     - logoffURL: </login.spr> [Test worker] {}
+07:02,647 INFO  codebeamer.config.SearchConfiguration     - Commit indexing blockSize: 10000 [Test worker] {}
+07:02,648 INFO  codebeamer.config.SearchConfiguration     - MaxClauseCount: 16000 [Test worker] {}
+07:02,652 INFO  codebeamer.config.SearchConfiguration     - Search background processing period: 60 [Test worker] {}
+07:02,670 INFO  intland.codebeamer.Config     - SVN character-encoding: <UTF-8> [Test worker] {}
+07:02,670 INFO  intland.codebeamer.Config     - export_passwords: true startSvnserve: true stopSvnserve: true port: 3690 [Test worker] {}
+07:02,671 INFO  intland.codebeamer.Config     - svnListWithCommitMessages true [Test worker] {}
+07:02,703 INFO  codebeamer.config.GitConfig     - git-http-backend </Library/Developer/CommandLineTools/usr/libexec/git-core/git-http-backend> [Test worker] {}
+07:02,717 INFO  codebeamer.config.HgConfig     - pythonExec </usr/bin/python> [Test worker] {}
+07:02,719 INFO  intland.codebeamer.Config     - Start Background building at: Fri Aug 25 01:05:00 CEST 2017 period: 86400 [Test worker] {}
+07:02,719 INFO  intland.codebeamer.Config     - DateTimeFormat: <MMM dd HH:mm yyyy> DateFormat: <MMM dd yyyy> [Test worker] {}
+07:02,720 INFO  intland.codebeamer.Config     - ignoreDirs: <CVS;SCCS;RCS;.svn;.hg;.git> [Test worker] {}
+07:02,720 INFO  intland.codebeamer.Config     - CVS character-encoding: <UTF-8> [Test worker] {}
+07:02,720 INFO  intland.codebeamer.Config     - sccTaskIdExpression: <#(([1-9][0-9]{3,9})((,|\s+)[1-9][0-9]{3,9})*)(?:\z|[\s.,;:)/\-]+)> htaccess: true [Test worker] {}
+07:02,736 INFO  intland.codebeamer.Config     - Shhpass: /Users/mgansler/intland/cbdev/gradle/zk/cb/sshpass executable: false [Test worker] {}
+07:02,749 INFO  codebeamer.config.LocationURL     - Set local hostname to: <localhost> [Test worker] {}
+07:02,754 INFO  intland.codebeamer.Config     - display-plain-text-as-html: false, storage-path: #, relocatable: false [Test worker] {}
+07:02,758 INFO  intland.codebeamer.Config     - Account auto-login by request header disabled [Test worker] {}
+07:02,758 INFO  intland.codebeamer.Config     - Account auto-login by request header <x-user-global-id> [Test worker] {}
+07:02,797 INFO  security.uploadfilters.UploadFilterConfig     - Loading configuration from org.apache.commons.configuration.CompositeConfiguration@517f46ed [Test worker] {}
+07:02,814 INFO  intland.codebeamer.Config     - 197.6 GB usable space under: /Users/mgansler/intland/cbdev/gradle/zk/cb/build/deployments/unittest, physical memory: 8 GB, free memory: 159 MB [Test worker] {}
+07:02,828 INFO  manager.support.SshAuthorizedKeyWriter     - authorized_keys file used by writer: </Users/mgansler/.ssh/authorized_keys> [Test worker] {}
+07:04,380 INFO  codebeamer.security.SecurityFilterConfig     - loginUrl </login.spr> smLoginUrl </authentication/smLogin> [Test worker] {}
+07:04,381 INFO  codebeamer.security.SecurityFilterConfig     - permissionDeniedUrl </permissionDenied.do> [Test worker] {}
+07:04,381 INFO  codebeamer.security.SecurityFilterConfig     - unfilteredUrls <(/logout\.do)|(/login\.spr)|(/errorHandler\.spr)|(/authentication/smLogin)|(/lostPassword\.do)|(/admin/passwordSent\.jsp)|(/low_licenses\.do)|(/createUser\.spr)|(/workspace/sentEmail\.jsp)|(/activation\.spr)|(/registerProduct\.spr)|(/activateAccount\.spr)|(/synchronizeAccount\.spr)|(/tmp.spr)|(/authentication)|(/sccCommitInfo)|(/sshRequestProcessor)|(/webfolder)|(/remote-api)|(/git)|(/hg)|(/.*\.jpg$)|(/.*\.png$)|(/.*\.gif$)|(/.*\.css$)|(/.*\.less$)|(/.*\.cssv$)|(/.*\.ico$)|(/.*\.wav$)|(/decorators/includes/i18nJS.jsp.*$)|(/.*\.js$)|(/.*doc-applet.jar$)|(/officeedit)|(/officelogin.spr*)|(/officeverify.spr*)|(/ajax/queryEvents\.spr)|(/ajax/getMessageCodes\.spr)|(/social/?.*)|(/social/signin/.*/)|(/selectLanguage.spr)|(/wro/.*)|(/activateUser\.spr)|(/resetPassword\.spr)|(/saas/register\.spr)|(/saas/autoLogin\.spr)|(/saas/isUserExists\.spr)|(/postinstall/registerUser\.spr)|(/postinstall/login\.spr)|(/remote/issue/login\.spr)|(/remote/issue/register\.spr)> [Test worker] {}
+07:04,381 INFO  codebeamer.security.SecurityFilterConfig     - filteredURIsWithoutLogin <(/login\.do)|(/listProjects\.spr)|(/sysadmin/resetManagedRepositoryAccess)> [Test worker] {}
+07:04,381 INFO  codebeamer.security.SecurityFilterConfig     - urlsWithDefaultLogin </sysadmin.do> [Test worker] {}
+07:04,382 INFO  codebeamer.security.SecurityFilterConfig     - basicAuthenticationURLs <> [Test worker] {}
+07:04,831 INFO  scm.provider.ScmRepositoryController     - Generated hook templates to directory </Users/mgansler/intland/cbdev/gradle/zk/cb/build/deployments/unittest/java_tmp/git-hook5136722622075092245-scripts> [Test worker] {}
+07:04,900 INFO  provider.svn.SvnJavaScmProvider     - SVNKit-1.9.0 rr10652 [Test worker] {}
+07:04,923 INFO  scm.provider.ScmRepositoryController     - Generated hook templates to directory </Users/mgansler/intland/cbdev/gradle/zk/cb/build/deployments/unittest/java_tmp/svn-hook152661764034461281-scripts> [Test worker] {}
+07:05,103 INFO  controller.saas.SaasManager     - Checking if the host-name enables Saas ? Hostname:<localhost> [Test worker] {}
+07:05,149 WARN  security.realm.LdapRealmConfigurator     - LDAP bean configuration is disabled. [Test worker] {}
+07:09,844 INFO  utils.scheduler.SchedulerFactory     - Starting/creating scheduler for servletContext:null [Test worker] {}
+07:09,927 INFO  utils.scheduler.SchedulerFactory     - Starting/creating report scheduler for servletContext:null [Test worker] {}
+07:10,702 INFO  wiki.hook.DataUriConverter     - DataUriConverter is enabled:true [Test worker] {}
+07:10,877 INFO  event.util.TrackerItemAddCommentListener     - Load the following properties file : item-add-comment.properties [Test worker] {}
+07:10,877 INFO  event.util.TrackerItemAddCommentListener     - item-add-comment.properties doesn't exist. [Test worker] {}
+07:11,090 INFO  remoting.test.AbstractRemotingTests     - Trying to connecting to remote url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+07:11,639 INFO  remoting.test.AbstractRemotingTests     - Successfully connected to url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+07:11,866 INFO  remoting.test.AbstractRemotingTests     - Trying to connecting to remote url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+07:11,911 INFO  remoting.test.AbstractRemotingTests     - Successfully connected to url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+07:12,219 INFO  remoting.test.AbstractRemotingTests     - Trying to connecting to remote url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+07:12,267 INFO  remoting.test.AbstractRemotingTests     - Successfully connected to url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+07:12,426 INFO  remoting.test.AbstractRemotingTests     - Trying to connecting to remote url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+07:12,459 INFO  remoting.test.AbstractRemotingTests     - Successfully connected to url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+07:12,560 INFO  remoting.test.AbstractRemotingTests     - Trying to connecting to remote url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+07:12,594 INFO  remoting.test.AbstractRemotingTests     - Successfully connected to url:http://10.200.10.1:10211/cb/remote-api [Test worker] {}
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

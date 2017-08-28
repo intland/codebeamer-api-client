@@ -19,5 +19,9 @@ dependencies {
 
 test {
     reports.html.enabled = true
-    useTestNG()
+    useTestNG {
+        systemProperties << [
+            "baseUrl": baseUrl,
+        ]
+    }
 }

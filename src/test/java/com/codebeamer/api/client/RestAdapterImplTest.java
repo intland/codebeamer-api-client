@@ -2,11 +2,20 @@ package com.codebeamer.api.client;
 
 import org.apache.http.auth.InvalidCredentialsException;
 import org.apache.http.conn.ConnectTimeoutException;
+import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
 
 public class RestAdapterImplTest {
+
+    private String baseUrl;
+
+    @BeforeSuite
+    public void getBaseUrl() {
+        baseUrl = System.getProperty("baseUrl", "http://172.0.0.1:8080/cb");
+    }
+
     @Test
     public void testGetVersion_withCorrectEndpoint_withCorrectCredentials() throws Exception {
         RestAdapter rest = getRestAdapterWithCorrectEndpointAndCredentials();
@@ -26,17 +35,17 @@ public class RestAdapterImplTest {
     }
 
     private RestAdapter getRestAdapterWithCorrectEndpointAndCredentials() {
-        Configuration config = new Configuration("http://10.200.10.1:8080/cb", "bond", "007");
+        Configuration config = new Configuration(baseUrl, "bond", "007");
         return new RestAdapterImpl(config);
     }
 
     private RestAdapter getRestAdapterWithCorrectEndpointAndIncorrectCredentials() {
-        Configuration config = new Configuration("http://10.200.10.1:8080/cb", "bond", "invalid");
+        Configuration config = new Configuration(baseUrl, "bond", "invalid");
         return new RestAdapterImpl(config);
     }
 
     private RestAdapter getRestAdapterWithIncorrectEndpoint() {
-        Configuration config = new Configuration("http://0.0.0.0:10000", "bond", "007");
+        Configuration config = new Configuration("http://127.0.0.1:10000", "bond", "007");
         return new RestAdapterImpl(config);
     }
 }

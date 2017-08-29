@@ -5,18 +5,18 @@
 package com.codebeamer.api.client;
 
 public class Version {
+    // major.minor.build[.revision] e.g 8.2.0[.1]
+    private static final String VERSION_REGEXP = "\\d\\.\\d\\.\\d(\\.\\d)?";
+
     private Integer major;
     private Integer minor;
     private Integer build;
     private Integer revision;
 
-    // major.minor.build[.revision] e.g 8.2.0[.1]
-    private static final String VERSION_REGEXP = "\\d\\.\\d\\.\\d(\\.\\d)?";
-
     private Version() {
     }
 
-    private Version(Integer major, Integer minor, Integer build, Integer revision) {
+    public Version(Integer major, Integer minor, Integer build, Integer revision) {
         this.major = major;
         this.minor = minor;
         this.build = build;
@@ -33,7 +33,7 @@ public class Version {
             Integer revision = parts.length == 4 ? Integer.valueOf(parts[3]) : null;
             return new Version(major, minor, build, revision);
         }
-         return null;
+        return null;
     }
 
     public static boolean isValidVersionString(String versionString) {
@@ -46,6 +46,37 @@ public class Version {
             versionString += String.format(".%d", revision);
         }
         return versionString;
+    }
+
+    /**
+     * Returns 0 when the two versions are equal, -1 if the other version is older and 1 if the other version is newer
+     *
+     * @param other another version to compare to
+     * @return the signum function of the difference
+     */
+    public int compareTo(Version other) {
+        if (this.major != other.getMajorVersion()) {
+            return Integer.signum(other.getMajorVersion() - this.major);
+        }
+        if (this.minor != other.getMinorVersion()) {
+            return Integer.signum(other.getMinorVersion() - this.minor);
+        }
+        if (this.build != other.getBuild()) {
+            return Integer.signum(other.getBuild() - this.build);
+        }
+
+        System.out.println("this:  " + this.revision);
+        System.out.println("other: " + other.getRevision());
+        if ((this.revision == null || this.revision == 0) && (other.getRevision() != null && other.getRevision() > 0)) {
+            return 1;
+        }
+        if ((this.revision != null && this.revision > 0) && (other.getRevision() == null || other.getRevision() == 0)) {
+            return -1;
+        }
+        if (this.revision != null && other.getRevision() != null) {
+            return Integer.signum(other.getRevision() - this.revision);
+        }
+        return 0;
     }
 
     public Integer getMajorVersion() {

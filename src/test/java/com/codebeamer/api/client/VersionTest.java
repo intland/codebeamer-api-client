@@ -21,6 +21,7 @@ public class VersionTest {
         Assert.assertTrue(Version.isValidVersionString("8.2.0"));
         Assert.assertTrue(Version.isValidVersionString("8.2.0.1"));
         Assert.assertFalse(Version.isValidVersionString("8.2"));
+        Assert.assertFalse(Version.isValidVersionString("8.2.0."));
         Assert.assertFalse(Version.isValidVersionString("8.2.0-1"));
         Assert.assertFalse(Version.isValidVersionString("a.2.0"));
         Assert.assertFalse(Version.isValidVersionString("8.b.0"));
@@ -62,5 +63,47 @@ public class VersionTest {
         Version actualVersion = Version.getVersionFromString("8.2.0");
         String actualVersionString = actualVersion.getVersionString();
         Assert.assertEquals(actualVersionString, "8.2.0");
+    }
+
+    @Test
+    public void testCompareTo_baseVersionHasRevision() throws Exception {
+        Version baseVersion = new Version(8, 2, 0, 1);
+
+        // equals
+        Assert.assertEquals(baseVersion.compareTo(Version.getVersionFromString("8.2.0.1")), 0);
+        Assert.assertEquals(baseVersion.compareTo(baseVersion), 0);
+
+        // other version is higher
+        Assert.assertEquals(baseVersion.compareTo(Version.getVersionFromString("8.3.0")), 1);
+        Assert.assertEquals(baseVersion.compareTo(Version.getVersionFromString("8.2.0.2")), 1);
+        Assert.assertEquals(baseVersion.compareTo(Version.getVersionFromString("9.0.0")), 1);
+
+        // other version is lower
+        Assert.assertEquals(baseVersion.compareTo(Version.getVersionFromString("8.2.0")), -1);
+        Assert.assertEquals(baseVersion.compareTo(Version.getVersionFromString("8.2.0.0")), -1);
+        Assert.assertEquals(baseVersion.compareTo(Version.getVersionFromString("8.1.0")), -1);
+        Assert.assertEquals(baseVersion.compareTo(Version.getVersionFromString("8.1.0.5")), -1);
+        Assert.assertEquals(baseVersion.compareTo(Version.getVersionFromString("7.3.0")), -1);
+    }
+
+    @Test
+    public void testCompareTo_baseVersionHasNoRevision() throws Exception {
+        Version baseVersion = new Version(8, 2, 0, null);
+
+        // equals
+        Assert.assertEquals(baseVersion.compareTo(Version.getVersionFromString("8.2.0")), 0);
+        Assert.assertEquals(baseVersion.compareTo(Version.getVersionFromString("8.2.0.0")), 0);
+        Assert.assertEquals(baseVersion.compareTo(baseVersion), 0);
+
+        // other version is higher
+        Assert.assertEquals(baseVersion.compareTo(Version.getVersionFromString("8.2.0.1")), 1);
+        Assert.assertEquals(baseVersion.compareTo(Version.getVersionFromString("8.3.0")), 1);
+        Assert.assertEquals(baseVersion.compareTo(Version.getVersionFromString("8.3.0.0")), 1);
+        Assert.assertEquals(baseVersion.compareTo(Version.getVersionFromString("9.0.0")), 1);
+
+        // other version is lower
+        Assert.assertEquals(baseVersion.compareTo(Version.getVersionFromString("8.1.0")), -1);
+        Assert.assertEquals(baseVersion.compareTo(Version.getVersionFromString("7.3.0")), -1);
+        Assert.assertEquals(baseVersion.compareTo(Version.getVersionFromString("7.3.0.5")), -1);
     }
 }

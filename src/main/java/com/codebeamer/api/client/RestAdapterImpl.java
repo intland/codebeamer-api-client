@@ -20,6 +20,7 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicHeader;
 import org.apache.log4j.Logger;
 
@@ -39,7 +40,7 @@ public class RestAdapterImpl implements RestAdapter {
 
     public RestAdapterImpl(Configuration config, HttpClient httpClient) {
         this.configuration = config;
-        this.client = httpClient;
+        this.client = httpClient != null ? httpClient : buildHttpClient();
         this.requestConfig = buildRequestConfig();
     }
 
@@ -47,6 +48,13 @@ public class RestAdapterImpl implements RestAdapter {
         return RequestConfig
                 .custom()
                 .setConnectTimeout(TIMEOUT)
+                .build();
+    }
+
+    private HttpClient buildHttpClient() {
+        return HttpClientBuilder
+                .create()
+                .setDefaultHeaders(getDefaultHeaders(configuration.getUsername(), configuration.getPassword()))
                 .build();
     }
 
@@ -95,7 +103,7 @@ public class RestAdapterImpl implements RestAdapter {
                 throw new InvalidCredentialsException("incorrect credentials");
             }
             return new BasicResponseHandler().handleResponse(response);
-        } catch(IOException ex) {
+        } catch (IOException ex) {
             logger.warn(ex);
             throw new ConnectTimeoutException(String.format("%s-request to %s timed out", request.getConfig(), request.getURI()));
         } finally {

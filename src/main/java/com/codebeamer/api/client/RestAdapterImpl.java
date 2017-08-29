@@ -35,7 +35,7 @@ public class RestAdapterImpl implements RestAdapter {
     private RequestConfig requestConfig;
     private Configuration configuration;
 
-    private static final int timeout = 500;
+    private static final int TIMEOUT = 500;
     private static final String REST_PATH = "/rest";
 
     public RestAdapterImpl(Configuration config) {
@@ -54,12 +54,12 @@ public class RestAdapterImpl implements RestAdapter {
     private RequestConfig buildRequestConfig() {
         return RequestConfig
                 .custom()
-                .setConnectTimeout(timeout)
+                .setConnectTimeout(TIMEOUT)
                 .build();
     }
 
     private HashSet<Header> getDefaultHeaders(String username, String password) {
-        HashSet<Header> defaultHeaders = new HashSet<Header>();
+        HashSet<Header> defaultHeaders = new HashSet<>();
 
         defaultHeaders.add(getAuthenticationHeader(username, password));
 
@@ -67,7 +67,7 @@ public class RestAdapterImpl implements RestAdapter {
     }
 
     private BasicHeader getAuthenticationHeader(String username, String password) {
-        final String authHeader = "Basic " + new Base64().encode((username + ":" + password).getBytes(Charsets.UTF_8));
+        final String authHeader = "Basic " + Base64.encode((username + ":" + password).getBytes(Charsets.UTF_8));
         return new BasicHeader(HttpHeaders.AUTHORIZATION, authHeader);
     }
 

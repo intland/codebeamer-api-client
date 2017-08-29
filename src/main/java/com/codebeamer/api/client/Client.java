@@ -12,6 +12,9 @@ import java.nio.file.Paths;
 public class Client {
     private static Logger logger = Logger.getLogger(Client.class);
 
+    private Client() {
+    }
+
     public static void main(String[] args) throws Exception {
         Options options = new Options();
         Option pathOption = new Option("p", "path", true, "path of XUnit results");

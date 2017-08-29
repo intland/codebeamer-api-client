@@ -29,14 +29,14 @@ import java.util.HashSet;
 
 public class RestAdapterImpl implements RestAdapter {
 
+    private static final int TIMEOUT = 500;
+    private static final String REST_PATH = "/rest";
+
     private static Logger logger = Logger.getLogger(RestAdapter.class);
 
     private HttpClient client;
     private RequestConfig requestConfig;
     private Configuration configuration;
-
-    private static final int TIMEOUT = 500;
-    private static final String REST_PATH = "/rest";
 
     public RestAdapterImpl(Configuration config, HttpClient httpClient) {
         this.configuration = config;
@@ -75,6 +75,16 @@ public class RestAdapterImpl implements RestAdapter {
     public Version getVersion() throws Exception {
         String response = executeGet(configuration.getUri() + REST_PATH + "/version");
         return Version.getVersionFromString(response);
+    }
+
+    @Override
+    public Boolean testConnection() {
+        try {
+            getVersion();
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
     }
 
     private String executeGet(String uri) throws Exception {

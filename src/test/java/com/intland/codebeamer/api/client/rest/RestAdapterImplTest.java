@@ -6,10 +6,8 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.StatusLine;
-import org.apache.http.auth.InvalidCredentialsException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.entity.StringEntity;
 import org.mockito.Mockito;
 import org.testng.Assert;
@@ -41,7 +39,7 @@ public class RestAdapterImplTest {
         Assert.assertTrue(rest.getVersion() instanceof Version);
     }
 
-    @Test(expectedExceptions = ConnectTimeoutException.class)
+    @Test(expectedExceptions = CodebeamerNotAccessibleException.class)
     public void testGetVersion_withIncorrectEndpoint_shouldThrowException() throws Exception {
         HttpClient client = mock(HttpClient.class);
         when(client.execute(Mockito.any(HttpGet.class))).thenThrow(new IOException("simulated timeout"));
@@ -50,7 +48,7 @@ public class RestAdapterImplTest {
         rest.getVersion();
     }
 
-    @Test(expectedExceptions = InvalidCredentialsException.class)
+    @Test(expectedExceptions = CodebeamerNotAccessibleException.class)
     public void testGetVersion_withCorrectEndpoint_WithIncorrectCredentials() throws Exception {
         HttpClient client = mock(HttpClient.class);
         HttpResponse response = mock(HttpResponse.class);

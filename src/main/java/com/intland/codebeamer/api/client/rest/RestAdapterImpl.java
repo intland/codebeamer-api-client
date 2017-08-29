@@ -13,13 +13,11 @@ import org.apache.http.Header;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-import org.apache.http.auth.InvalidCredentialsException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -74,7 +72,7 @@ public class RestAdapterImpl implements RestAdapter {
     }
 
     @Override
-    public Version getVersion() throws Exception {
+    public Version getVersion() throws CodebeamerNotAccessibleException {
         String response = executeGet(configuration.getUri() + REST_PATH + "/version");
         return Version.getVersionFromString(response);
     }
@@ -92,14 +90,14 @@ public class RestAdapterImpl implements RestAdapter {
         }
     }
 
-    private String executeGet(String uri) throws Exception {
+    private String executeGet(String uri) throws CodebeamerNotAccessibleException {
         HttpGet get = new HttpGet(uri);
         get.setConfig(requestConfig);
 
         return executeRest(get);
     }
 
-    private String executePost(String uri, String content) throws Exception {
+    private String executePost(String uri, String content) throws CodebeamerNotAccessibleException {
         StringEntity entity = new StringEntity(content, Charsets.UTF_8);
         entity.setContentType("application/json");
 
@@ -110,7 +108,7 @@ public class RestAdapterImpl implements RestAdapter {
         return executeRest(post);
     }
 
-    private String executeRest(HttpRequestBase request) throws Exception {
+    private String executeRest(HttpRequestBase request) throws CodebeamerNotAccessibleException {
         logger.debug(String.format("%s-request to %s", request.getConfig(), request.getURI()));
         try {
             HttpResponse response = client.execute(request);
@@ -120,7 +118,7 @@ public class RestAdapterImpl implements RestAdapter {
             return new BasicResponseHandler().handleResponse(response);
         } catch (IOException ex) {
             logger.warn(ex);
-            throw new ConnectTimeoutException(String.format("%s-request to %s timed out", request.getConfig(), request.getURI()));
+            throw new ConnectionFailedException(String.format("%s-request to %s timed out", request.getConfig(), request.getURI()));
         } finally {
             request.releaseConnection();
         }

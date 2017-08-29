@@ -17,16 +17,13 @@ dependencies {
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.6'
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.3'
 
+    testCompile group: 'org.mockito', name: 'mockito-core', version: '2.9.0'
     testCompile group: 'org.testng', name: 'testng', version: '6.11'
 }
 
 test {
     reports.html.enabled = true
-    useTestNG {
-        systemProperties << [
-            "baseUrl": baseUrl,
-        ]
-    }
+    useTestNG()
 }
 
 run {

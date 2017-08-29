@@ -20,7 +20,6 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicHeader;
 import org.apache.log4j.Logger;
 
@@ -38,17 +37,10 @@ public class RestAdapterImpl implements RestAdapter {
     private static final int TIMEOUT = 500;
     private static final String REST_PATH = "/rest";
 
-    public RestAdapterImpl(Configuration config) {
+    public RestAdapterImpl(Configuration config, HttpClient httpClient) {
         this.configuration = config;
-        this.client = buildHttpClient();
+        this.client = httpClient;
         this.requestConfig = buildRequestConfig();
-    }
-
-    private HttpClient buildHttpClient() {
-        return HttpClientBuilder
-                .create()
-                .setDefaultHeaders(getDefaultHeaders(configuration.getUsername(), configuration.getPassword()))
-                .build();
     }
 
     private RequestConfig buildRequestConfig() {
@@ -72,19 +64,19 @@ public class RestAdapterImpl implements RestAdapter {
     }
 
     @Override
-    public Version getVersion() throws ConnectTimeoutException, InvalidCredentialsException {
+    public Version getVersion() throws Exception {
         String response = executeGet(configuration.getUri() + REST_PATH + "/version");
         return Version.getVersionFromString(response);
     }
 
-    private String executeGet(String uri) throws ConnectTimeoutException, InvalidCredentialsException {
+    private String executeGet(String uri) throws Exception {
         HttpGet get = new HttpGet(uri);
         get.setConfig(requestConfig);
 
         return executeRest(get);
     }
 
-    private String executePost(String uri, String content) throws ConnectTimeoutException, InvalidCredentialsException {
+    private String executePost(String uri, String content) throws Exception {
         StringEntity entity = new StringEntity(content, Charsets.UTF_8);
         entity.setContentType("application/json");
 
@@ -95,7 +87,7 @@ public class RestAdapterImpl implements RestAdapter {
         return executeRest(post);
     }
 
-    private String executeRest(HttpRequestBase request) throws ConnectTimeoutException, InvalidCredentialsException {
+    private String executeRest(HttpRequestBase request) throws Exception {
         logger.debug(String.format("%s-request to %s", request.getConfig(), request.getURI()));
         try {
             HttpResponse response = client.execute(request);

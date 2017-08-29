@@ -13,7 +13,7 @@ public class RestAdapterImplTest {
 
     @BeforeSuite
     public void getBaseUrl() {
-        baseUrl = System.getProperty("baseUrl", "http://172.0.0.1:8080/cb");
+        baseUrl = System.getProperty("baseUrl", "http://10.200.10.1:8080/cb");
     }
 
     @Test

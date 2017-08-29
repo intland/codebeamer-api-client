@@ -40,7 +40,8 @@ public class Version {
         return versionString.matches(VERSION_REGEXP);
     }
 
-    public String getVersionString() {
+    @Override
+    public String toString() {
         String versionString = String.format("%d.%d.%d", major, minor, build);
         if (revision != null) {
             versionString += String.format(".%d", revision);

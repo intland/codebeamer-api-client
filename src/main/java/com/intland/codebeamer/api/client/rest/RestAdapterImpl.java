@@ -78,15 +78,17 @@ public class RestAdapterImpl implements RestAdapter {
     }
 
     @Override
-    public Boolean testConnection() {
+    public Boolean testConnection() throws CodebeamerNotAccessibleException {
         try {
             Version version = getVersion();
             logger.info("Connection successful. CodeBeamer Version is " + version.toString());
             return true;
-        } catch (Exception ex) {
-            logger.info("Connection not successful.");
-            logger.error(ex);
-            return false;
+        } catch (ConnectionFailedException ex) {
+            logger.error("Connection not successful. Please check CodeBeamer address: " + configuration.getUri());
+            throw new CodebeamerNotAccessibleException(ex);
+        } catch (InvalidCredentialsException ex) {
+            logger.error("Connection not successful. Please check the credentials");
+            throw new CodebeamerNotAccessibleException(ex);
         }
     }
 
@@ -117,8 +119,7 @@ public class RestAdapterImpl implements RestAdapter {
             }
             return new BasicResponseHandler().handleResponse(response);
         } catch (IOException ex) {
-            logger.warn(ex);
-            throw new ConnectionFailedException(String.format("%s-request to %s timed out", request.getConfig(), request.getURI()));
+            throw new ConnectionFailedException(String.format("%s-request to %s timed out", request.getConfig(), request.getURI()), ex);
         } finally {
             request.releaseConnection();
         }

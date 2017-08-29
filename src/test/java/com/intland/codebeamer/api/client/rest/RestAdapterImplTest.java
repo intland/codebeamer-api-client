@@ -20,7 +20,7 @@ import static org.mockito.Mockito.when;
 
 public class RestAdapterImplTest {
 
-    private static final Configuration config = new Configuration("http:/localhost:8080/cb", "bond", "007");
+    private static final Configuration config = new Configuration("http://localhost:8080/cb", "bond", "007");
 
     @Test
     public void testGetVersion_withCorrectEndpoint_withCorrectCredentials() throws Exception {
@@ -39,7 +39,7 @@ public class RestAdapterImplTest {
         Assert.assertTrue(rest.getVersion() instanceof Version);
     }
 
-    @Test(expectedExceptions = CodebeamerNotAccessibleException.class)
+    @Test(expectedExceptions = {CodebeamerNotAccessibleException.class, ConnectionFailedException.class})
     public void testGetVersion_withIncorrectEndpoint_shouldThrowException() throws Exception {
         HttpClient client = mock(HttpClient.class);
         when(client.execute(Mockito.any(HttpGet.class))).thenThrow(new IOException("simulated timeout"));
@@ -48,7 +48,7 @@ public class RestAdapterImplTest {
         rest.getVersion();
     }
 
-    @Test(expectedExceptions = CodebeamerNotAccessibleException.class)
+    @Test(expectedExceptions = {CodebeamerNotAccessibleException.class, InvalidCredentialsException.class})
     public void testGetVersion_withCorrectEndpoint_WithIncorrectCredentials() throws Exception {
         HttpClient client = mock(HttpClient.class);
         HttpResponse response = mock(HttpResponse.class);
@@ -78,7 +78,7 @@ public class RestAdapterImplTest {
         Assert.assertTrue(rest.testConnection(), "connection test");
     }
 
-    @Test
+    @Test(expectedExceptions = {CodebeamerNotAccessibleException.class, InvalidCredentialsException.class})
     public void testTestConnection_CodebeamerReturns401() throws Exception {
         HttpClient client = mock(HttpClient.class);
         HttpResponse response = mock(HttpResponse.class);
@@ -92,7 +92,7 @@ public class RestAdapterImplTest {
         Assert.assertFalse(rest.testConnection(), "connection test");
     }
 
-    @Test
+    @Test(expectedExceptions = {CodebeamerNotAccessibleException.class, ConnectionFailedException.class})
     public void testTestConnection_CodebeamerTimesOut() throws Exception {
         HttpClient client = mock(HttpClient.class);
 

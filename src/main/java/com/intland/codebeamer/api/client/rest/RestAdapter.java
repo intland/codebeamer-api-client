@@ -5,5 +5,5 @@ import com.intland.codebeamer.api.client.Version;
 public interface RestAdapter {
     Version getVersion() throws CodebeamerNotAccessibleException;
 
-    Boolean testConnection();
+    Boolean testConnection() throws CodebeamerNotAccessibleException;
 }

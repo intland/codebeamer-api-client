@@ -81,10 +81,11 @@ public class RestAdapterImpl implements RestAdapter {
     public Boolean testConnection() {
         try {
             Version version = getVersion();
-            logger.info("Connection succesful. CodeBeamer Version is " + version.toString());
+            logger.info("Connection successful. CodeBeamer Version is " + version.toString());
             return true;
         } catch (Exception ex) {
-            logger.warn("Connection not succesful. Reason:" + System.lineSeparator() + ex.getMessage());
+            logger.info("Connection not successful.");
+            logger.error(ex);
             return false;
         }
     }

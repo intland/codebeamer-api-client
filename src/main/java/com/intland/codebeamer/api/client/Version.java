@@ -2,7 +2,7 @@
  * Copyright (c) 2017 Intland Software (support@intland.com)
  *
  */
-package com.codebeamer.api.client;
+package com.intland.codebeamer.api.client;
 
 public class Version {
     // major.minor.build[.revision] e.g 8.2.0[.1]

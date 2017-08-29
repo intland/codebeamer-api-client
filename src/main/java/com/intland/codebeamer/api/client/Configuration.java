@@ -2,7 +2,7 @@
  * Copyright (c) 2017 Intland Software (support@intland.com)
  *
  */
-package com.codebeamer.api.client;
+package com.intland.codebeamer.api.client;
 
 public class Configuration {
     private String uri;

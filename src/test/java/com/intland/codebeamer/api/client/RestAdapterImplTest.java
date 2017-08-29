@@ -1,4 +1,4 @@
-package com.codebeamer.api.client;
+package com.intland.codebeamer.api.client;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;

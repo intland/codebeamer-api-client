@@ -3,7 +3,7 @@
  *
  */
 
-package com.codebeamer.api.client;
+package com.intland.codebeamer.api.client;
 
 import jcifs.util.Base64;
 import org.apache.commons.codec.Charsets;

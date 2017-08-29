@@ -1,4 +1,4 @@
-package com.codebeamer.api.client;
+package com.intland.codebeamer.api.client;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;

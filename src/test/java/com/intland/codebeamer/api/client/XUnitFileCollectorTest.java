@@ -1,11 +1,14 @@
-package com.codebeamer.api.client;
+package com.intland.codebeamer.api.client;
 
 import org.apache.log4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -15,11 +18,10 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 public class XUnitFileCollectorTest {
 
     private static Logger logger = Logger.getLogger(XUnitFileCollectorTest.class);
-
-    private XUnitFileCollector collector;
     File emptyDir;
     File dirWithOneFile;
     File dirWithSixFiles;
+    private XUnitFileCollector collector;
 
     @BeforeSuite
     public void getXUnitResultReader() throws IOException {

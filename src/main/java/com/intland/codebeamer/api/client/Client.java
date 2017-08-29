@@ -2,7 +2,7 @@
  * Copyright (c) 2017 Intland Software (support@intland.com)
  *
  */
-package com.codebeamer.api.client;
+package com.intland.codebeamer.api.client;
 
 import org.apache.commons.cli.*;
 import org.apache.log4j.Logger;

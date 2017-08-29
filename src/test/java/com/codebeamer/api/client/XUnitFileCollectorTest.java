@@ -5,8 +5,7 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -73,6 +72,25 @@ public class XUnitFileCollectorTest {
         File[] actualFiles = collector.getListOfFilesForDirectory(dirWithSixFiles);
 
         Assert.assertEquals(actualFiles.length, 6);
+    }
+
+    @Test
+    public void testListFiles() throws Exception {
+        PrintStream origOut = System.out;
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            PrintStream out = new PrintStream(baos);
+            System.setOut(out);
+
+            collector.listFiles(collector.getListOfFilesForDirectory(dirWithOneFile));
+            out.flush();
+
+            Assert.assertEquals(baos.toString().trim(), "File AclRemotingTests.xml");
+        } catch (Exception ex) {
+            throw ex;
+        } finally {
+            System.setOut(origOut);
+        }
     }
 
     private File getTestResultDirWithSixFiles() throws IOException {

@@ -38,10 +38,10 @@ public class RestAdapterImpl implements RestAdapter {
     public RestAdapterImpl(Configuration config) {
         this.configuration = config;
         this.client = buildHttpClient();
-        this.requestConfig =  buildRequestConfig();
+        this.requestConfig = buildRequestConfig();
     }
 
-    private  HttpClient buildHttpClient() {
+    private HttpClient buildHttpClient() {
         return HttpClientBuilder
                 .create()
                 .setDefaultHeaders(getDefaultHeaders(configuration.getUsername(), configuration.getPassword()))

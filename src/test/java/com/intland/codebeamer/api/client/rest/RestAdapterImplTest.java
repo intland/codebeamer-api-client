@@ -1,5 +1,7 @@
-package com.intland.codebeamer.api.client;
+package com.intland.codebeamer.api.client.rest;
 
+import com.intland.codebeamer.api.client.Configuration;
+import com.intland.codebeamer.api.client.Version;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;

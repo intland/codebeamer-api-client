@@ -3,8 +3,10 @@
  *
  */
 
-package com.intland.codebeamer.api.client;
+package com.intland.codebeamer.api.client.rest;
 
+import com.intland.codebeamer.api.client.Configuration;
+import com.intland.codebeamer.api.client.Version;
 import jcifs.util.Base64;
 import org.apache.commons.codec.Charsets;
 import org.apache.http.Header;

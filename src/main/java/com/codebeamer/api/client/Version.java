@@ -64,16 +64,11 @@ public class Version {
         if (this.build != other.getBuild()) {
             return Integer.signum(other.getBuild() - this.build);
         }
-
-        System.out.println("this:  " + this.revision);
-        System.out.println("other: " + other.getRevision());
         if ((this.revision == null || this.revision == 0) && (other.getRevision() != null && other.getRevision() > 0)) {
             return 1;
-        }
-        if ((this.revision != null && this.revision > 0) && (other.getRevision() == null || other.getRevision() == 0)) {
+        } else if ((this.revision != null && this.revision > 0) && (other.getRevision() == null || other.getRevision() == 0)) {
             return -1;
-        }
-        if (this.revision != null && other.getRevision() != null) {
+        } else if (this.revision != null && other.getRevision() != null) {
             return Integer.signum(other.getRevision() - this.revision);
         }
         return 0;

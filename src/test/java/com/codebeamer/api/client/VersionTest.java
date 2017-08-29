@@ -13,6 +13,7 @@ public class VersionTest {
     @Test
     public void testGetVersionFromString_withInvalidString() throws Exception {
         Version version = Version.getVersionFromString("8.a.0");
+        Assert.assertFalse(version instanceof Version);
         Assert.assertNull(version);
     }
 
@@ -59,10 +60,17 @@ public class VersionTest {
     }
 
     @Test
-    public void testGetVersionString() throws Exception {
-        Version actualVersion = Version.getVersionFromString("8.2.0");
+    public void testGetVersionString_withoutRevision() throws Exception {
+        Version actualVersion = new Version(8, 2, 0, null);
         String actualVersionString = actualVersion.getVersionString();
         Assert.assertEquals(actualVersionString, "8.2.0");
+    }
+
+    @Test
+    public void testGetVersionString_withRevision() throws Exception {
+        Version actualVersion = new Version(8, 2, 0, 1);
+        String actualVersionString = actualVersion.getVersionString();
+        Assert.assertEquals(actualVersionString, "8.2.0.1");
     }
 
     @Test
@@ -74,6 +82,7 @@ public class VersionTest {
         Assert.assertEquals(baseVersion.compareTo(baseVersion), 0);
 
         // other version is higher
+        Assert.assertEquals(baseVersion.compareTo(Version.getVersionFromString("8.2.1")), 1);
         Assert.assertEquals(baseVersion.compareTo(Version.getVersionFromString("8.3.0")), 1);
         Assert.assertEquals(baseVersion.compareTo(Version.getVersionFromString("8.2.0.2")), 1);
         Assert.assertEquals(baseVersion.compareTo(Version.getVersionFromString("9.0.0")), 1);

@@ -24,8 +24,9 @@ public class Version {
     }
 
     public static Version getVersionFromString(String versionString) {
-        if (isValidVersionString(versionString)) {
-            String[] parts = versionString.split("\\.");
+        String trimmedVersionString = versionString.replaceAll("^\"", "").replaceAll("\"$", "");
+        if (isValidVersionString(trimmedVersionString)) {
+            String[] parts = trimmedVersionString.split("\\.");
             Integer major = Integer.valueOf(parts[0]);
             Integer minor = Integer.valueOf(parts[1]);
             Integer build = Integer.valueOf(parts[2]);

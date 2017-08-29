@@ -72,8 +72,9 @@ public class RestAdapterImpl implements RestAdapter {
     }
 
     @Override
-    public String getVersion() throws ConnectTimeoutException, InvalidCredentialsException {
-        return executeGet(configuration.getUri() + REST_PATH + "/version");
+    public Version getVersion() throws ConnectTimeoutException, InvalidCredentialsException {
+        String response = executeGet(configuration.getUri() + REST_PATH + "/version");
+        return Version.getVersionFromString(response);
     }
 
     private String executeGet(String uri) throws ConnectTimeoutException, InvalidCredentialsException {

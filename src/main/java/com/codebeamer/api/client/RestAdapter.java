@@ -5,5 +5,5 @@ import org.apache.http.conn.ConnectTimeoutException;
 
 @FunctionalInterface
 public interface RestAdapter {
-    String getVersion() throws ConnectTimeoutException, InvalidCredentialsException;
+    Version getVersion() throws ConnectTimeoutException, InvalidCredentialsException;
 }

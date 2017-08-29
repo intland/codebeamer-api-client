@@ -2,10 +2,9 @@ package com.codebeamer.api.client;
 
 import org.apache.http.auth.InvalidCredentialsException;
 import org.apache.http.conn.ConnectTimeoutException;
+import org.testng.Assert;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
-
-import static org.testng.Assert.assertEquals;
 
 public class RestAdapterImplTest {
 
@@ -19,7 +18,7 @@ public class RestAdapterImplTest {
     @Test
     public void testGetVersion_withCorrectEndpoint_withCorrectCredentials() throws Exception {
         RestAdapter rest = getRestAdapterWithCorrectEndpointAndCredentials();
-        assertEquals(rest.getVersion(), "\"8.3.0\"");
+        Assert.assertTrue(rest.getVersion() instanceof Version);
     }
 
     @Test(expectedExceptions = ConnectTimeoutException.class)

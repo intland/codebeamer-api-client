@@ -57,4 +57,10 @@ public class VersionTest {
         Assert.assertNull(actualVersion.getRevision());
     }
 
+    @Test
+    public void testGetVersionString() throws Exception {
+        Version actualVersion = Version.getVersionFromString("8.2.0");
+        String actualVersionString = actualVersion.getVersionString();
+        Assert.assertEquals(actualVersionString, "8.2.0");
+    }
 }

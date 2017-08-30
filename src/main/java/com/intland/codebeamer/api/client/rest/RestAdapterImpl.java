@@ -9,21 +9,21 @@ import com.intland.codebeamer.api.client.Configuration;
 import com.intland.codebeamer.api.client.Version;
 import jcifs.util.Base64;
 import org.apache.commons.codec.Charsets;
-import org.apache.http.Header;
-import org.apache.http.HttpHeaders;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
+import org.apache.http.*;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicHeader;
 import org.apache.log4j.Logger;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 
@@ -92,6 +92,37 @@ public class RestAdapterImpl implements RestAdapter {
         }
     }
 
+    @Override
+    public Boolean uploadXUnitResults(File[] files) throws CodebeamerNotAccessibleException {
+        Boolean allSuccessful = true;
+        for (File file: files) {
+            if (!uploadXUnitResult(file)) {
+                allSuccessful = false;
+            }
+        }
+        return allSuccessful;
+    }
+
+    private Boolean uploadXUnitResult(File file) throws CodebeamerNotAccessibleException {
+        String fileName = file.getName();
+        FileBody fileBody = new FileBody(file);
+        logger.info(String.format("uploading %s with a size of %d bytes...", fileName, file.length()));
+
+        MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
+        multipartEntityBuilder.setMode(HttpMultipartMode.STRICT);
+        multipartEntityBuilder.addPart(fileName, fileBody);
+
+        HttpEntity entity = multipartEntityBuilder.build();
+
+        try {
+            executePost("/invalid", entity);
+            return true;
+        } catch (CodebeamerNotAccessibleException ex) {
+            logger.error(ex);
+            return false;
+        }
+    }
+
     private String executeGet(String uri) throws CodebeamerNotAccessibleException {
         HttpGet get = new HttpGet(uri);
         get.setConfig(requestConfig);
@@ -99,10 +130,7 @@ public class RestAdapterImpl implements RestAdapter {
         return executeRest(get);
     }
 
-    private String executePost(String uri, String content) throws CodebeamerNotAccessibleException {
-        StringEntity entity = new StringEntity(content, Charsets.UTF_8);
-        entity.setContentType("application/json");
-
+    private String executePost(String uri, HttpEntity entity) throws CodebeamerNotAccessibleException {
         HttpPost post = new HttpPost(uri);
         post.setConfig(requestConfig);
         post.setEntity(entity);
@@ -111,7 +139,7 @@ public class RestAdapterImpl implements RestAdapter {
     }
 
     private String executeRest(HttpRequestBase request) throws CodebeamerNotAccessibleException {
-        logger.debug(String.format("%s-request to %s", request.getConfig(), request.getURI()));
+        logger.debug(String.format("%s-request to %s%s", request.getMethod(), configuration.getUri(), request.getURI()));
         try {
             HttpResponse response = client.execute(request);
             if (response.getStatusLine().getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {

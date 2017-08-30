@@ -1,6 +1,7 @@
 package com.intland.codebeamer.api.client;
 
 import org.testng.Assert;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 public class VersionTest {
@@ -17,16 +18,9 @@ public class VersionTest {
         Assert.assertNull(version);
     }
 
-    @Test
-    public void testIsValidVersionString() throws Exception {
-        Assert.assertTrue(Version.isValidVersionString("8.2.0"));
-        Assert.assertTrue(Version.isValidVersionString("8.2.0.1"));
-        Assert.assertFalse(Version.isValidVersionString("8.2"));
-        Assert.assertFalse(Version.isValidVersionString("8.2.0."));
-        Assert.assertFalse(Version.isValidVersionString("8.2.0-1"));
-        Assert.assertFalse(Version.isValidVersionString("a.2.0"));
-        Assert.assertFalse(Version.isValidVersionString("8.b.0"));
-        Assert.assertFalse(Version.isValidVersionString("8.2.c"));
+    @Test(dataProvider = "isValidVersionStringProvider")
+    public void testIsValidVersionString(String versionString, boolean expected) throws Exception {
+        Assert.assertEquals(Version.isValidVersionString(versionString), expected, String.format("is %s a valid version string", versionString));
     }
 
     @Test
@@ -73,46 +67,68 @@ public class VersionTest {
         Assert.assertEquals(actualVersionString, "8.2.0.1");
     }
 
-    @Test
-    public void testCompareTo_baseVersionHasRevision() throws Exception {
-        Version baseVersion = new Version(8, 2, 0, 1);
-
-        // equals
-        Assert.assertEquals(baseVersion.compareTo(Version.getVersionFromString("8.2.0.1")), 0);
-        Assert.assertEquals(baseVersion.compareTo(baseVersion), 0);
-
-        // other version is higher
-        Assert.assertEquals(baseVersion.compareTo(Version.getVersionFromString("8.2.1")), 1);
-        Assert.assertEquals(baseVersion.compareTo(Version.getVersionFromString("8.3.0")), 1);
-        Assert.assertEquals(baseVersion.compareTo(Version.getVersionFromString("8.2.0.2")), 1);
-        Assert.assertEquals(baseVersion.compareTo(Version.getVersionFromString("9.0.0")), 1);
-
-        // other version is lower
-        Assert.assertEquals(baseVersion.compareTo(Version.getVersionFromString("8.2.0")), -1);
-        Assert.assertEquals(baseVersion.compareTo(Version.getVersionFromString("8.2.0.0")), -1);
-        Assert.assertEquals(baseVersion.compareTo(Version.getVersionFromString("8.1.0")), -1);
-        Assert.assertEquals(baseVersion.compareTo(Version.getVersionFromString("8.1.0.5")), -1);
-        Assert.assertEquals(baseVersion.compareTo(Version.getVersionFromString("7.3.0")), -1);
+    @Test(dataProvider = "versionCompareProvider")
+    public void testCompareTo(Version version, Version other, Version.Compare expectedResult) {
+        Assert.assertEquals(version.compareTo(other), expectedResult, String.format("comparing %s to %s", version, other));
     }
 
-    @Test
-    public void testCompareTo_baseVersionHasNoRevision() throws Exception {
-        Version baseVersion = new Version(8, 2, 0, null);
+    @DataProvider(name = "isValidVersionStringProvider")
+    private Object[][] isValidVersionStringProvicer() {
+        return new Object[][]{
+                // valid Strings
+                {"8.2.0", true},
+                {"8.2.0.1", true},
+                // invalid Strings
+                {"8.2", false},
+                {"8.2.0.", false},
+                {"8.2.0-1", false},
+                {"a.2.0", false},
+                {"8.b.0", false},
+                {"8.2.c", false},
+        };
+    }
 
-        // equals
-        Assert.assertEquals(baseVersion.compareTo(Version.getVersionFromString("8.2.0")), 0);
-        Assert.assertEquals(baseVersion.compareTo(Version.getVersionFromString("8.2.0.0")), 0);
-        Assert.assertEquals(baseVersion.compareTo(baseVersion), 0);
-
-        // other version is higher
-        Assert.assertEquals(baseVersion.compareTo(Version.getVersionFromString("8.2.0.1")), 1);
-        Assert.assertEquals(baseVersion.compareTo(Version.getVersionFromString("8.3.0")), 1);
-        Assert.assertEquals(baseVersion.compareTo(Version.getVersionFromString("8.3.0.0")), 1);
-        Assert.assertEquals(baseVersion.compareTo(Version.getVersionFromString("9.0.0")), 1);
-
-        // other version is lower
-        Assert.assertEquals(baseVersion.compareTo(Version.getVersionFromString("8.1.0")), -1);
-        Assert.assertEquals(baseVersion.compareTo(Version.getVersionFromString("7.3.0")), -1);
-        Assert.assertEquals(baseVersion.compareTo(Version.getVersionFromString("7.3.0.5")), -1);
+    @DataProvider(name = "versionCompareProvider")
+    private Object[][] versionCompareProvider() {
+        return new Object[][]{
+                // equals
+                {new Version(8, 2, 0, null), new Version(8, 2, 0, null), Version.Compare.EQUAL},
+                {new Version(8, 2, 0, null), new Version(8, 2, 0, 0), Version.Compare.EQUAL},
+                {new Version(8, 2, 0, 0), new Version(8, 2, 0, null), Version.Compare.EQUAL},
+                {new Version(8, 2, 0, 0), new Version(8, 2, 0, 0), Version.Compare.EQUAL},
+                // other version is newer
+                {new Version(8, 2, 0, 0), new Version(8, 2, 0, 1), Version.Compare.OTHER_IS_NEWER},
+                {new Version(8, 2, 0, 0), new Version(8, 2, 1, null), Version.Compare.OTHER_IS_NEWER},
+                {new Version(8, 2, 0, 0), new Version(8, 3, 0, null), Version.Compare.OTHER_IS_NEWER},
+                {new Version(8, 2, 0, 0), new Version(9, 2, 0, null), Version.Compare.OTHER_IS_NEWER},
+                {new Version(8, 2, 0, null), new Version(8, 2, 0, 1), Version.Compare.OTHER_IS_NEWER},
+                {new Version(8, 2, 0, null), new Version(8, 2, 1, 0), Version.Compare.OTHER_IS_NEWER},
+                {new Version(8, 2, 0, null), new Version(8, 2, 1, null), Version.Compare.OTHER_IS_NEWER},
+                {new Version(8, 2, 0, null), new Version(8, 3, 0, 0), Version.Compare.OTHER_IS_NEWER},
+                {new Version(8, 2, 0, null), new Version(8, 3, 0, null), Version.Compare.OTHER_IS_NEWER},
+                {new Version(8, 2, 0, null), new Version(9, 1, 0, 0), Version.Compare.OTHER_IS_NEWER},
+                {new Version(8, 2, 0, null), new Version(9, 1, 0, null), Version.Compare.OTHER_IS_NEWER},
+                {new Version(8, 2, 0, null), new Version(9, 2, 0, 0), Version.Compare.OTHER_IS_NEWER},
+                {new Version(8, 2, 0, null), new Version(9, 2, 0, null), Version.Compare.OTHER_IS_NEWER},
+                {new Version(8, 2, 1, null), new Version(8, 3, 0, 0), Version.Compare.OTHER_IS_NEWER},
+                {new Version(8, 2, 1, null), new Version(8, 3, 0, null), Version.Compare.OTHER_IS_NEWER},
+                // other version is older
+                {new Version(8, 2, 1, 1), new Version(7, 2, 1, null), Version.Compare.OTHER_IS_OLDER},
+                {new Version(8, 2, 1, 1), new Version(7, 3, 2, 5), Version.Compare.OTHER_IS_OLDER},
+                {new Version(8, 2, 1, 1), new Version(8, 1, 1, null), Version.Compare.OTHER_IS_OLDER},
+                {new Version(8, 2, 1, 1), new Version(8, 1, 2, 5), Version.Compare.OTHER_IS_OLDER},
+                {new Version(8, 2, 1, 1), new Version(8, 1, 2, null), Version.Compare.OTHER_IS_OLDER},
+                {new Version(8, 2, 1, 1), new Version(8, 2, 0, 5), Version.Compare.OTHER_IS_OLDER},
+                {new Version(8, 2, 1, 1), new Version(8, 2, 0, null), Version.Compare.OTHER_IS_OLDER},
+                {new Version(8, 2, 1, 1), new Version(8, 2, 1, 0), Version.Compare.OTHER_IS_OLDER},
+                {new Version(8, 2, 1, null), new Version(7, 2, 1, 5), Version.Compare.OTHER_IS_OLDER},
+                {new Version(8, 2, 1, null), new Version(7, 2, 1, null), Version.Compare.OTHER_IS_OLDER},
+                {new Version(8, 2, 1, null), new Version(7, 3, 2, 5), Version.Compare.OTHER_IS_OLDER},
+                {new Version(8, 2, 1, null), new Version(8, 1, 1, null), Version.Compare.OTHER_IS_OLDER},
+                {new Version(8, 2, 1, null), new Version(8, 1, 2, 5), Version.Compare.OTHER_IS_OLDER},
+                {new Version(8, 2, 1, null), new Version(8, 1, 2, null), Version.Compare.OTHER_IS_OLDER},
+                {new Version(8, 2, 1, null), new Version(8, 2, 0, 5), Version.Compare.OTHER_IS_OLDER},
+                {new Version(8, 2, 1, null), new Version(8, 2, 0, null), Version.Compare.OTHER_IS_OLDER},
+        };
     }
 }

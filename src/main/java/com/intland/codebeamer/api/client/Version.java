@@ -5,6 +5,13 @@
 package com.intland.codebeamer.api.client;
 
 public class Version {
+
+    public enum Compare {
+        EQUAL,
+        OTHER_IS_NEWER,
+        OTHER_IS_OLDER
+    }
+
     // major.minor.build[.revision] e.g 8.2.0[.1]
     private static final String VERSION_REGEXP = "\\d\\.\\d\\.\\d(\\.\\d)?";
 
@@ -50,29 +57,31 @@ public class Version {
     }
 
     /**
-     * Returns 0 when the two versions are equal, -1 if the other version is older and 1 if the other version is newer
+     * Returns Compare.EQUAL when the two versions are equal,
+     * Compare.OTHER_IS_OLDER if the other version is older and
+     * Compare.OTHER_IS_NEWER if the other version is newer
      *
      * @param other another version to compare to
-     * @return the signum function of the difference
+     * @return enum Version.Compare
      */
-    public int compareTo(Version other) {
+    public Compare compareTo(Version other) {
         if (this.major != other.getMajorVersion()) {
-            return Integer.signum(other.getMajorVersion() - this.major);
+            return this.major > other.getMajorVersion() ? Compare.OTHER_IS_OLDER : Compare.OTHER_IS_NEWER;
         }
         if (this.minor != other.getMinorVersion()) {
-            return Integer.signum(other.getMinorVersion() - this.minor);
+            return this.minor > other.getMinorVersion() ? Compare.OTHER_IS_OLDER : Compare.OTHER_IS_NEWER;
         }
         if (this.build != other.getBuild()) {
-            return Integer.signum(other.getBuild() - this.build);
+            return this.build > other.getBuild() ? Compare.OTHER_IS_OLDER : Compare.OTHER_IS_NEWER;
         }
         if ((this.revision == null || this.revision == 0) && (other.getRevision() != null && other.getRevision() > 0)) {
-            return 1;
+            return Compare.OTHER_IS_NEWER;
         } else if ((this.revision != null && this.revision > 0) && (other.getRevision() == null || other.getRevision() == 0)) {
-            return -1;
-        } else if (this.revision != null && other.getRevision() != null) {
-            return Integer.signum(other.getRevision() - this.revision);
+            return Compare.OTHER_IS_OLDER;
+        } else if (this.revision != null && other.getRevision() != null && this.revision != other.getRevision()) {
+            return this.revision > other.getRevision() ? Compare.OTHER_IS_OLDER : Compare.OTHER_IS_NEWER;
         }
-        return 0;
+        return Compare.EQUAL;
     }
 
     public Integer getMajorVersion() {

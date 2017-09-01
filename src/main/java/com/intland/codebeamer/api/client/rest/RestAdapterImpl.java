@@ -94,26 +94,15 @@ public class RestAdapterImpl implements RestAdapter {
 
     @Override
     public Boolean uploadXUnitResults(File[] files) throws CodebeamerNotAccessibleException {
-        Boolean allSuccessful = true;
-        for (File file: files) {
-            if (!uploadXUnitResult(file)) {
-                allSuccessful = false;
-            }
-        }
-        return allSuccessful;
-    }
-
-    private Boolean uploadXUnitResult(File file) throws CodebeamerNotAccessibleException {
-        String fileName = file.getName();
-        FileBody fileBody = new FileBody(file);
-        logger.info(String.format("uploading %s with a size of %d bytes...", fileName, file.length()));
-
         MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
         multipartEntityBuilder.setMode(HttpMultipartMode.STRICT);
-        multipartEntityBuilder.addPart(fileName, fileBody);
-
+        for (File file : files) {
+            String fileName = file.getName();
+            FileBody fileBody = new FileBody(file);
+            logger.info(String.format("uploading %s with a size of %d bytes...", fileName, file.length()));
+            multipartEntityBuilder.addPart(fileName, fileBody);
+        }
         HttpEntity entity = multipartEntityBuilder.build();
-
         try {
             executePost("/invalid", entity);
             return true;

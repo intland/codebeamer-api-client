@@ -4,7 +4,7 @@
  */
 package com.intland.codebeamer.api.client.rest;
 
-public class InvalidCredentialsException extends CodebeamerNotAccessibleException{
+public class InvalidCredentialsException extends CodebeamerNotAccessibleException {
     public InvalidCredentialsException(String message) {
         super(message);
     }

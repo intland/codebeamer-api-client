@@ -6,20 +6,12 @@ package com.intland.codebeamer.api.client;
 
 public class Version {
 
-    public enum Compare {
-        EQUAL,
-        OTHER_IS_NEWER,
-        OTHER_IS_OLDER
-    }
-
     // major.minor.build[.revision] e.g 8.2.0[.1]
     private static final String VERSION_REGEXP = "\\d\\.\\d\\.\\d(\\.\\d)?";
-
     private Integer major;
     private Integer minor;
     private Integer build;
     private Integer revision;
-
     private Version() {
     }
 
@@ -98,5 +90,11 @@ public class Version {
 
     public Integer getRevision() {
         return revision;
+    }
+
+    public enum Compare {
+        EQUAL,
+        OTHER_IS_NEWER,
+        OTHER_IS_OLDER
     }
 }

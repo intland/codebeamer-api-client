@@ -1,19 +1,21 @@
 package com.intland.codebeamer.api.client;
 
 import org.apache.log4j.Logger;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 import org.testng.Assert;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+import static org.mockito.Mockito.mock;
 
 public class XUnitFileCollectorTest {
 
@@ -78,21 +80,16 @@ public class XUnitFileCollectorTest {
 
     @Test
     public void testListFiles() throws Exception {
-        PrintStream origOut = System.out;
-        try {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            PrintStream out = new PrintStream(baos);
-            System.setOut(out);
+        ArgumentCaptor<String> logCaptor = ArgumentCaptor.forClass(String.class);
+        Logger logger = mock(Logger.class);
 
-            collector.listFiles(collector.getListOfFilesForDirectory(dirWithOneFile));
-            out.flush();
+        XUnitFileCollector collectorWithCustomLogger = new XUnitFileCollector(logger);
+        collectorWithCustomLogger.listFiles(collector.getListOfFilesForDirectory(dirWithOneFile));
 
-            Assert.assertEquals(baos.toString().trim(), "File AclRemotingTests.xml");
-        } catch (Exception ex) {
-            throw ex;
-        } finally {
-            System.setOut(origOut);
-        }
+        Mockito.verify(logger).info(logCaptor.capture());
+        List<String> log = logCaptor.getAllValues();
+        String first = log.remove(0);
+        Assert.assertEquals(first, "File AclRemotingTests.xml");
     }
 
     private File getTestResultDirWithSixFiles() throws IOException {

@@ -57,15 +57,31 @@ public class Version {
      * @return enum Version.Compare
      */
     public Compare compareTo(Version other) {
+        return compareMajorVersionTo(other);
+    }
+
+    private Compare compareMajorVersionTo(Version other) {
         if (this.major != other.getMajorVersion()) {
             return this.major > other.getMajorVersion() ? Compare.OTHER_IS_OLDER : Compare.OTHER_IS_NEWER;
         }
+        return compareMinorVersionTo(other);
+    }
+
+    private Compare compareMinorVersionTo(Version other) {
         if (this.minor != other.getMinorVersion()) {
             return this.minor > other.getMinorVersion() ? Compare.OTHER_IS_OLDER : Compare.OTHER_IS_NEWER;
         }
+        return compareBuildVersionTo(other);
+    }
+
+    private Compare compareBuildVersionTo(Version other) {
         if (this.build != other.getBuild()) {
             return this.build > other.getBuild() ? Compare.OTHER_IS_OLDER : Compare.OTHER_IS_NEWER;
         }
+        return compareRevisionVersionTo(other);
+    }
+
+    private Compare compareRevisionVersionTo(Version other) {
         if ((this.revision == null || this.revision == 0) && (other.getRevision() != null && other.getRevision() > 0)) {
             return Compare.OTHER_IS_NEWER;
         } else if ((this.revision != null && this.revision > 0) && (other.getRevision() == null || other.getRevision() == 0)) {

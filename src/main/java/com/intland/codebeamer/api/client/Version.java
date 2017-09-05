@@ -12,6 +12,7 @@ public class Version {
     private Integer minor;
     private Integer build;
     private Integer revision;
+
     private Version() {
     }
 

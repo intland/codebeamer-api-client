@@ -64,7 +64,7 @@ public class VersionTest {
     }
 
     @DataProvider(name = "isValidVersionStringProvider")
-    private Object[][] isValidVersionStringProvicer() {
+    private Object[][] isValidVersionStringProvider() {
         return new Object[][]{
                 // valid Strings
                 {"8.2.0", true},

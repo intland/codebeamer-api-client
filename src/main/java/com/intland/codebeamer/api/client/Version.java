@@ -82,12 +82,12 @@ public class Version {
     }
 
     private Compare compareRevisionVersionTo(Version other) {
-        if ((this.revision == null || this.revision == 0) && (other.getRevision() != null && other.getRevision() > 0)) {
+        if (this.getRevision() == 0 && other.getRevision() > 0) {
             return Compare.OTHER_IS_NEWER;
-        } else if ((this.revision != null && this.revision > 0) && (other.getRevision() == null || other.getRevision() == 0)) {
+        } else if (this.getRevision() > 0 && other.getRevision() == 0) {
             return Compare.OTHER_IS_OLDER;
-        } else if (this.revision != null && other.getRevision() != null && this.revision != other.getRevision()) {
-            return this.revision > other.getRevision() ? Compare.OTHER_IS_OLDER : Compare.OTHER_IS_NEWER;
+        } else if (this.getRevision() != other.getRevision()) {
+            return this.getRevision() > other.getRevision() ? Compare.OTHER_IS_OLDER : Compare.OTHER_IS_NEWER;
         }
         return Compare.EQUAL;
     }
@@ -105,7 +105,7 @@ public class Version {
     }
 
     public Integer getRevision() {
-        return revision;
+        return revision == null ? 0 : revision;
     }
 
     public enum Compare {

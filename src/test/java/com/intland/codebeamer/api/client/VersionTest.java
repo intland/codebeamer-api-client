@@ -53,18 +53,9 @@ public class VersionTest {
         Assert.assertEquals(actualVersion.getRevision(), Integer.valueOf(0));
     }
 
-    @Test
-    public void testGetVersionString_withoutRevision() throws Exception {
-        Version actualVersion = new Version(8, 2, 0, null);
-        String actualVersionString = actualVersion.toString();
-        Assert.assertEquals(actualVersionString, "8.2.0");
-    }
-
-    @Test
-    public void testGetVersionString_withRevision() throws Exception {
-        Version actualVersion = new Version(8, 2, 0, 1);
-        String actualVersionString = actualVersion.toString();
-        Assert.assertEquals(actualVersionString, "8.2.0.1");
+    @Test(dataProvider = "toStringProvider")
+    public void testToString(Version version, String expected) throws Exception {
+        Assert.assertEquals(version.toString(), expected, "toString");
     }
 
     @Test(dataProvider = "versionCompareProvider")
@@ -85,6 +76,15 @@ public class VersionTest {
                 {"a.2.0", false},
                 {"8.b.0", false},
                 {"8.2.c", false},
+        };
+    }
+
+    @DataProvider(name = "toStringProvider")
+    private Object[][] toStringProvider() {
+        return new Object[][]{
+                {new Version(8, 2, 0, null), "8.2.0"},
+                {new Version(8, 2, 0, 0), "8.2.0.0"},
+                {new Version(8, 2, 0, 1), "8.2.0.1"},
         };
     }
 

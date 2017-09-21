@@ -1,6 +1,6 @@
 package com.intland.codebeamer.api.client.rest;
 
-import com.intland.codebeamer.api.client.Configuration;
+import com.intland.codebeamer.api.client.CodebeamerApiConfiguration;
 import com.intland.codebeamer.api.client.Version;
 import org.apache.commons.codec.Charsets;
 import org.apache.commons.io.IOUtils;
@@ -27,8 +27,6 @@ import java.util.List;
 import static org.mockito.Mockito.*;
 
 public class RestAdapterImplTest {
-
-    private static final Configuration config = new Configuration("http://localhost:8080/cb", "bond", "007");
     private static Logger logger = Logger.getLogger(RestAdapterImplTest.class);
 
     @Test
@@ -43,7 +41,7 @@ public class RestAdapterImplTest {
         when(response.getEntity()).thenReturn(entity);
         when(client.execute(Mockito.any(HttpGet.class))).thenReturn(response);
 
-        RestAdapter rest = new RestAdapterImpl(config, client);
+        RestAdapter rest = new RestAdapterImpl(getDummyConfig(), client);
 
         Assert.assertTrue(rest.getVersion() instanceof Version);
     }
@@ -53,7 +51,7 @@ public class RestAdapterImplTest {
         HttpClient client = mock(HttpClient.class);
         when(client.execute(Mockito.any(HttpGet.class))).thenThrow(new IOException("simulated timeout"));
 
-        RestAdapter rest = new RestAdapterImpl(config, client);
+        RestAdapter rest = new RestAdapterImpl(getDummyConfig(), client);
         rest.getVersion();
     }
 
@@ -67,7 +65,7 @@ public class RestAdapterImplTest {
         when(response.getStatusLine()).thenReturn(statusLine);
         when(client.execute(Mockito.any(HttpGet.class))).thenReturn(response);
 
-        RestAdapter rest = new RestAdapterImpl(config, client);
+        RestAdapter rest = new RestAdapterImpl(getDummyConfig(), client);
         rest.getVersion();
     }
 
@@ -83,7 +81,7 @@ public class RestAdapterImplTest {
         when(response.getEntity()).thenReturn(entity);
         when(client.execute(Mockito.any(HttpGet.class))).thenReturn(response);
 
-        RestAdapter rest = new RestAdapterImpl(config, client);
+        RestAdapter rest = new RestAdapterImpl(getDummyConfig(), client);
         Assert.assertTrue(rest.testConnection(), "connection test");
     }
 
@@ -97,7 +95,7 @@ public class RestAdapterImplTest {
         when(response.getStatusLine()).thenReturn(statusLine);
         when(client.execute(Mockito.any(HttpGet.class))).thenReturn(response);
 
-        RestAdapter rest = new RestAdapterImpl(config, client);
+        RestAdapter rest = new RestAdapterImpl(getDummyConfig(), client);
         Assert.assertFalse(rest.testConnection(), "connection test");
     }
 
@@ -107,7 +105,7 @@ public class RestAdapterImplTest {
 
         when(client.execute(Mockito.any(HttpGet.class))).thenThrow(new IOException("simulated timeout"));
 
-        RestAdapter rest = new RestAdapterImpl(config, client);
+        RestAdapter rest = new RestAdapterImpl(getDummyConfig(), client);
         Assert.assertFalse(rest.testConnection(), "connection test");
     }
 
@@ -121,7 +119,7 @@ public class RestAdapterImplTest {
         when(response.getStatusLine()).thenReturn(statusLine);
         when(client.execute(Mockito.any(HttpPost.class))).thenReturn(response);
 
-        RestAdapter rest = new RestAdapterImpl(config, client);
+        RestAdapter rest = new RestAdapterImpl(getDummyConfig(), client);
         Assert.assertTrue(rest.uploadXUnitResults(files), "was upload successful");
     }
 
@@ -135,7 +133,7 @@ public class RestAdapterImplTest {
         when(response.getStatusLine()).thenReturn(statusLine);
         when(client.execute(Mockito.any(HttpPost.class))).thenReturn(response);
 
-        RestAdapter rest = new RestAdapterImpl(config, client);
+        RestAdapter rest = new RestAdapterImpl(getDummyConfig(), client);
         Assert.assertFalse(rest.uploadXUnitResults(files), "was upload successful");
     }
 
@@ -151,7 +149,7 @@ public class RestAdapterImplTest {
         when(response.getStatusLine()).thenReturn(statusLine);
         when(client.execute(Mockito.any(HttpPost.class))).thenReturn(response);
 
-        RestAdapter rest = new RestAdapterImpl(config, client);
+        RestAdapter rest = new RestAdapterImpl(getDummyConfig(), client);
         rest.uploadXUnitResults(files);
 
         Mockito.verify(client, times(1)).execute(Mockito.any(HttpPost.class));
@@ -168,7 +166,7 @@ public class RestAdapterImplTest {
         when(response.getStatusLine()).thenReturn(statusLine);
         when(client.execute(Mockito.any(HttpPost.class))).thenReturn(response);
 
-        RestAdapter rest = new RestAdapterImpl(config, client);
+        RestAdapter rest = new RestAdapterImpl(getDummyConfig(), client);
         rest.uploadXUnitResults(files);
 
         Mockito.verify(client, times(1)).execute(requestCaptor.capture());
@@ -199,5 +197,12 @@ public class RestAdapterImplTest {
             Assert.assertTrue(body.contains(fileContent), String.format("body contains content of %s", file.getName()));
         }
         Assert.assertTrue(totalFileSize < entity.getContentLength(), "entity length is greater than combined file size");
+    }
+
+    private CodebeamerApiConfiguration getDummyConfig() {
+        return CodebeamerApiConfiguration.getInstance()
+                .withUri("http://localhost:8080/cb")
+                .withUsername("bond")
+                .withPassword("007");
     }
 }

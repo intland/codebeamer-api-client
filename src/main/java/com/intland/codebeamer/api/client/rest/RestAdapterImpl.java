@@ -5,7 +5,7 @@
 
 package com.intland.codebeamer.api.client.rest;
 
-import com.intland.codebeamer.api.client.Configuration;
+import com.intland.codebeamer.api.client.CodebeamerApiConfiguration;
 import com.intland.codebeamer.api.client.Version;
 import jcifs.util.Base64;
 import org.apache.commons.codec.Charsets;
@@ -36,10 +36,10 @@ public class RestAdapterImpl implements RestAdapter {
 
     private HttpClient client;
     private RequestConfig requestConfig;
-    private Configuration configuration;
+    private CodebeamerApiConfiguration codebeamerApiConfiguration;
 
-    public RestAdapterImpl(Configuration config, HttpClient httpClient) {
-        this.configuration = config;
+    public RestAdapterImpl(CodebeamerApiConfiguration config, HttpClient httpClient) {
+        this.codebeamerApiConfiguration = config;
         this.client = httpClient != null ? httpClient : buildHttpClient();
         this.requestConfig = buildRequestConfig();
     }
@@ -54,7 +54,7 @@ public class RestAdapterImpl implements RestAdapter {
     private HttpClient buildHttpClient() {
         return HttpClientBuilder
                 .create()
-                .setDefaultHeaders(getDefaultHeaders(configuration.getUsername(), configuration.getPassword()))
+                .setDefaultHeaders(getDefaultHeaders(codebeamerApiConfiguration.getUsername(), codebeamerApiConfiguration.getPassword()))
                 .build();
     }
 
@@ -84,7 +84,7 @@ public class RestAdapterImpl implements RestAdapter {
             logger.info("Connection successful. CodeBeamer Version is " + version.toString());
             return true;
         } catch (ConnectionFailedException ex) {
-            logger.error("Connection not successful. Please check CodeBeamer address: " + configuration.getUri());
+            logger.error("Connection not successful. Please check CodeBeamer address: " + codebeamerApiConfiguration.getUri());
             throw new CodebeamerNotAccessibleException(ex);
         } catch (InvalidCredentialsException ex) {
             logger.error("Connection not successful. Please check the credentials");
@@ -113,14 +113,14 @@ public class RestAdapterImpl implements RestAdapter {
     }
 
     private String executeGet(String uri) throws CodebeamerNotAccessibleException {
-        HttpGet get = new HttpGet(uri);
+        HttpGet get = new HttpGet(codebeamerApiConfiguration.getUri() + uri);
         get.setConfig(requestConfig);
 
         return executeRest(get);
     }
 
     private String executePost(String uri, HttpEntity entity) throws CodebeamerNotAccessibleException {
-        HttpPost post = new HttpPost(uri);
+        HttpPost post = new HttpPost(codebeamerApiConfiguration.getUri() + uri);
         post.setConfig(requestConfig);
         post.setEntity(entity);
 

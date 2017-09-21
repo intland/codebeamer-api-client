@@ -5,8 +5,12 @@
 
 package com.intland.codebeamer.api.client.rest;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.intland.codebeamer.api.client.CodebeamerApiConfiguration;
 import com.intland.codebeamer.api.client.Version;
+import com.intland.codebeamer.api.client.dto.TrackerDto;
+import com.intland.codebeamer.api.client.dto.TrackerItemDto;
+import com.intland.codebeamer.api.client.dto.TrackerTypeDto;
 import jcifs.util.Base64;
 import org.apache.commons.codec.Charsets;
 import org.apache.http.*;
@@ -33,6 +37,7 @@ public class RestAdapterImpl implements RestAdapter {
     private static final String REST_PATH = "/rest";
 
     private static Logger logger = Logger.getLogger(RestAdapter.class);
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     private HttpClient client;
     private RequestConfig requestConfig;
@@ -73,8 +78,45 @@ public class RestAdapterImpl implements RestAdapter {
 
     @Override
     public Version getVersion() throws CodebeamerNotAccessibleException {
-        String response = executeGet(configuration.getUri() + REST_PATH + "/version");
+        String uri = String.format("%s/version", REST_PATH);
+        String response = executeGet(uri);
         return Version.getVersionFromString(response);
+    }
+
+    @Override
+    public TrackerItemDto getTrackerItem(Integer id) throws CodebeamerNotAccessibleException {
+        String uri = String.format("%s/item/%s", REST_PATH, id);
+        String response = executeGet(uri);
+        try {
+            return objectMapper.readValue(response, TrackerItemDto.class);
+        } catch (IOException ex) {
+            logger.error(ex);
+            return null;
+        }
+    }
+
+    @Override
+    public TrackerDto getTracker(Integer id) throws CodebeamerNotAccessibleException {
+        String uri = String.format("%s/tracker/%s", REST_PATH, id);
+        String response = executeGet(uri);
+        try {
+            return objectMapper.readValue(response, TrackerDto.class);
+        } catch (IOException e) {
+            logger.error(e);
+            return null;
+        }
+    }
+
+    @Override
+    public TrackerTypeDto getTrackerType(Integer id) throws CodebeamerNotAccessibleException {
+        String uri = String.format("%s/tracker/type/%s", REST_PATH, id);
+        String response = executeGet(uri);
+        try {
+            return objectMapper.readValue(response, TrackerTypeDto.class);
+        } catch (IOException e) {
+            logger.error(e);
+            return null;
+        }
     }
 
     @Override
@@ -99,7 +141,7 @@ public class RestAdapterImpl implements RestAdapter {
         for (File file : files) {
             String fileName = file.getName();
             FileBody fileBody = new FileBody(file);
-            logger.info(String.format("uploading %s with a size of %d bytes...", fileName, file.length()));
+            logger.info(String.format("preparing to upload %s with a size of %d bytes...", fileName, file.length()));
             multipartEntityBuilder.addPart(fileName, fileBody);
         }
         HttpEntity entity = multipartEntityBuilder.build();
@@ -128,11 +170,15 @@ public class RestAdapterImpl implements RestAdapter {
     }
 
     private String executeRest(HttpRequestBase request) throws CodebeamerNotAccessibleException {
-        logger.debug(String.format("%s-request to %s%s", request.getMethod(), configuration.getUri(), request.getURI()));
+        assert client != null;
+        logger.debug(String.format("%s-request to %s", request.getMethod(), request.getURI()));
         try {
             HttpResponse response = client.execute(request);
             if (response.getStatusLine().getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
                 throw new InvalidCredentialsException("incorrect credentials");
+            }
+            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_NOT_FOUND) {
+                throw new ItemNotFoundException("cannot find item");
             }
             return new BasicResponseHandler().handleResponse(response);
         } catch (IOException ex) {

@@ -8,10 +8,16 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.log4j.Logger;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Stream;
 
 public class XUnitFileCollector {
 
     private static Logger logger;
+
+    private Set<File> directories = new HashSet<>();
 
     public XUnitFileCollector() {
         logger = Logger.getLogger(XUnitFileCollector.class);
@@ -21,24 +27,43 @@ public class XUnitFileCollector {
         logger = customLogger;
     }
 
-    public void listFiles(File[] files) {
-        for (int i = 0; i < files.length; i++) {
-            if (files[i].isFile()) {
-                logger.info("File " + files[i].getName());
-            } else if (files[i].isDirectory()) {
-                logger.info("Directory " + files[i].getName());
-            }
+    public void addDirectory(File dir) {
+        if (dir.isDirectory()) {
+            directories.add(dir);
         }
     }
 
-    public File[] getListOfFilesForDirectory(File directory) {
-        return directory.listFiles();
+    public void listFiles(File[] files) {
+        logger.info(getFileList(files));
     }
 
-    public File[] getListOfFilesForMultipleDirectories(File[] directories) {
+    public String getFileList(File[] files) {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < files.length; i++) {
+            if (files[i].isFile()) {
+                builder.append(String.format("File %s%n", files[i].getName()));
+            } else {
+                builder.append(String.format("Directory %s%n", files[i].getName()));
+            }
+        }
+        return builder.toString().trim();
+    }
+
+    public File[] getFiles() {
+        return getFiles(directories.toArray(new File[directories.size()]));
+    }
+
+    public File[] getFiles(File directory) {
+        try (Stream<File> fileStream = Arrays.stream(directory.listFiles())) {
+            return fileStream.filter(file -> file.getName().endsWith("xml"))
+                    .toArray(File[]::new);
+        }
+    }
+
+    public File[] getFiles(File[] directories) {
         File[] allFiles = new File[0];
         for (File directory : directories) {
-            allFiles = ArrayUtils.addAll(allFiles, getListOfFilesForDirectory(directory));
+            allFiles = ArrayUtils.addAll(allFiles, getFiles(directory));
         }
         return allFiles;
     }

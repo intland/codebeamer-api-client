@@ -61,6 +61,6 @@ public class Client {
         logger.info(String.format("Target Codebeamer Version is %s", rest.getVersion()));
 
         XUnitFileCollector collector = new XUnitFileCollector();
-        collector.listFiles(collector.getListOfFilesForDirectory(Paths.get(inputPath).toFile()));
+        collector.listFiles(collector.getFiles(Paths.get(inputPath).toFile()));
     }
 }

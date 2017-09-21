@@ -3,7 +3,7 @@ plugins {
     id "java"
 }
 
-group 'com.codebeamer'
+group 'com.intland'
 version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8

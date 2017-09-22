@@ -5,22 +5,32 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 public class VersionTest {
-    @Test
-    public void testGetVersionFromString_withValidString() throws Exception {
-        Version version = Version.getVersionFromString("8.2.0");
-        Assert.assertTrue(version instanceof Version);
-    }
 
-    @Test
-    public void testGetVersionFromString_withInvalidString() throws Exception {
-        Version version = Version.getVersionFromString("8.a.0");
-        Assert.assertFalse(version instanceof Version);
-        Assert.assertNull(version);
-    }
-
-    @Test(dataProvider = "isValidVersionStringProvider")
+    @Test(dataProvider = "versionStringProvider")
     public void testIsValidVersionString(String versionString, boolean expected) throws Exception {
         Assert.assertEquals(Version.isValidVersionString(versionString), expected, String.format("is %s a valid version string", versionString));
+    }
+
+    @Test(dataProvider = "versionStringProvider")
+    public void testGetVersionFromString(String versionString, boolean expected)throws Exception{
+        Version version = Version.getVersionFromString(versionString);
+        Assert.assertEquals(version instanceof Version, expected);
+    }
+
+    @DataProvider(name = "versionStringProvider")
+    private Object[][] versionStringProvider() {
+        return new Object[][]{
+                // valid Strings
+                {"8.2.0", true},
+                {"8.2.0.1", true},
+                // invalid Strings
+                {"8.2", false},
+                {"8.2.0.", false},
+                {"8.2.0-1", false},
+                {"a.2.0", false},
+                {"8.b.0", false},
+                {"8.2.c", false},
+        };
     }
 
     @Test
@@ -58,27 +68,6 @@ public class VersionTest {
         Assert.assertEquals(version.toString(), expected, "toString");
     }
 
-    @Test(dataProvider = "versionCompareProvider")
-    public void testCompareTo(Version version, Version other, Version.Compare expectedResult) {
-        Assert.assertEquals(version.compareTo(other), expectedResult, String.format("comparing %s to %s", version, other));
-    }
-
-    @DataProvider(name = "isValidVersionStringProvider")
-    private Object[][] isValidVersionStringProvider() {
-        return new Object[][]{
-                // valid Strings
-                {"8.2.0", true},
-                {"8.2.0.1", true},
-                // invalid Strings
-                {"8.2", false},
-                {"8.2.0.", false},
-                {"8.2.0-1", false},
-                {"a.2.0", false},
-                {"8.b.0", false},
-                {"8.2.c", false},
-        };
-    }
-
     @DataProvider(name = "toStringProvider")
     private Object[][] toStringProvider() {
         return new Object[][]{
@@ -86,6 +75,11 @@ public class VersionTest {
                 {new Version(8, 2, 0, 0), "8.2.0.0"},
                 {new Version(8, 2, 0, 1), "8.2.0.1"},
         };
+    }
+
+    @Test(dataProvider = "versionCompareProvider")
+    public void testCompareTo(Version version, Version other, Version.Compare expectedResult) {
+        Assert.assertEquals(version.compareTo(other), expectedResult, String.format("comparing %s to %s", version, other));
     }
 
     @DataProvider(name = "versionCompareProvider")

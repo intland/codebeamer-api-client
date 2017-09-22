@@ -136,12 +136,6 @@ public class RestAdapterImpl implements RestAdapter {
             Version version = getVersion();
             logger.info("Connection successful. CodeBeamer Version is " + version.toString());
             return true;
-        } catch (ConnectionFailedException ex) {
-            logger.error("Connection not successful. Please check CodeBeamer address: " + CodebeamerApiConfiguration.getInstance().getUri());
-            return false;
-        } catch (InvalidCredentialsException ex) {
-            logger.error("Connection not successful. Please check the credentials");
-            return false;
         } catch (RequestFailed ex) {
             logger.error(ex);
             return false;

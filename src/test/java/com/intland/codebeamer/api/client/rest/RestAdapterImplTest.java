@@ -44,6 +44,11 @@ public class RestAdapterImplTest {
         clientMock = mock(HttpClient.class);
         responseMock = mock(HttpResponse.class);
         statusLineMock = mock(StatusLine.class);
+
+        CodebeamerApiConfiguration.getInstance()
+                .withUri("http://localhost:8080/cb")
+                .withUsername("bond")
+                .withPassword("007");
     }
 
     @Test(dataProvider = "trackerItemProvider")
@@ -56,7 +61,7 @@ public class RestAdapterImplTest {
         when(responseMock.getStatusLine()).thenReturn(statusLineMock);
         when(responseMock.getEntity()).thenReturn(entity);
         when(clientMock.execute(Mockito.any(HttpGet.class))).thenReturn(responseMock);
-        RestAdapter rest = new RestAdapterImpl(getDummyConfig(), clientMock);
+        RestAdapter rest = new RestAdapterImpl(clientMock);
 
         try {
             TrackerItemDto actual = rest.getTrackerItem(1);
@@ -83,7 +88,7 @@ public class RestAdapterImplTest {
         when(responseMock.getStatusLine()).thenReturn(statusLineMock);
         when(responseMock.getEntity()).thenReturn(entity);
         when(clientMock.execute(Mockito.any(HttpGet.class))).thenReturn(responseMock);
-        RestAdapter rest = new RestAdapterImpl(getDummyConfig(), clientMock);
+        RestAdapter rest = new RestAdapterImpl(clientMock);
 
         try {
             TrackerDto actual = rest.getTracker(1);
@@ -117,7 +122,7 @@ public class RestAdapterImplTest {
         when(responseMock.getStatusLine()).thenReturn(statusLineMock);
         when(responseMock.getEntity()).thenReturn(entity);
         when(clientMock.execute(Mockito.any(HttpGet.class))).thenReturn(responseMock);
-        RestAdapter rest = new RestAdapterImpl(getDummyConfig(), clientMock);
+        RestAdapter rest = new RestAdapterImpl(clientMock);
 
         try {
             TrackerTypeDto actual = rest.getTrackerType(expectedId);
@@ -153,7 +158,7 @@ public class RestAdapterImplTest {
         when(response.getEntity()).thenReturn(entity);
         when(client.execute(Mockito.any(HttpGet.class))).thenReturn(response);
 
-        RestAdapter rest = new RestAdapterImpl(getDummyConfig(), client);
+        RestAdapter rest = new RestAdapterImpl(client);
 
         Assert.assertTrue(rest.getVersion() instanceof Version);
     }
@@ -163,7 +168,7 @@ public class RestAdapterImplTest {
         HttpClient client = mock(HttpClient.class);
         when(client.execute(Mockito.any(HttpGet.class))).thenThrow(new IOException("simulated timeout"));
 
-        RestAdapter rest = new RestAdapterImpl(getDummyConfig(), client);
+        RestAdapter rest = new RestAdapterImpl(client);
         rest.getVersion();
     }
 
@@ -177,7 +182,7 @@ public class RestAdapterImplTest {
         when(response.getStatusLine()).thenReturn(statusLine);
         when(client.execute(Mockito.any(HttpGet.class))).thenReturn(response);
 
-        RestAdapter rest = new RestAdapterImpl(getDummyConfig(), client);
+        RestAdapter rest = new RestAdapterImpl(client);
         rest.getVersion();
     }
 
@@ -193,7 +198,7 @@ public class RestAdapterImplTest {
         when(response.getEntity()).thenReturn(entity);
         when(client.execute(Mockito.any(HttpGet.class))).thenReturn(response);
 
-        RestAdapter rest = new RestAdapterImpl(getDummyConfig(), client);
+        RestAdapter rest = new RestAdapterImpl(client);
         Assert.assertTrue(rest.testConnection(), "connection test");
     }
 
@@ -207,7 +212,7 @@ public class RestAdapterImplTest {
         when(response.getStatusLine()).thenReturn(statusLine);
         when(client.execute(Mockito.any(HttpGet.class))).thenReturn(response);
 
-        RestAdapter rest = new RestAdapterImpl(getDummyConfig(), client);
+        RestAdapter rest = new RestAdapterImpl(client);
         Assert.assertFalse(rest.testConnection(), "connection test");
     }
 
@@ -309,12 +314,5 @@ public class RestAdapterImplTest {
             Assert.assertTrue(body.contains(fileContent), String.format("body contains content of %s", file.getName()));
         }
         Assert.assertTrue(totalFileSize < entity.getContentLength(), "entity length is greater than combined file size");
-    }
-
-    private CodebeamerApiConfiguration getDummyConfig() {
-        return CodebeamerApiConfiguration.getInstance()
-                .withUri("http://localhost:8080/cb")
-                .withUsername("bond")
-                .withPassword("007");
     }
 }

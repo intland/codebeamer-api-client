@@ -55,11 +55,11 @@ public class Client {
         final String username = cmd.getOptionValue("username");
         final String password = cmd.getOptionValue("password");
 
-        CodebeamerApiConfiguration config = CodebeamerApiConfiguration.getInstance()
+        CodebeamerApiConfiguration.getInstance()
                 .withUri(url)
                 .withUsername(username)
                 .withPassword(password);
-        RestAdapter rest = new RestAdapterImpl(config, null);
+        RestAdapter rest = new RestAdapterImpl(null);
 
         logger.info(String.format("Target Codebeamer Version is %s", rest.getVersion()));
 

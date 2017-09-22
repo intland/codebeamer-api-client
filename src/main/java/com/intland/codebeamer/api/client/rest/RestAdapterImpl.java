@@ -41,10 +41,8 @@ public class RestAdapterImpl implements RestAdapter {
 
     private HttpClient client;
     private RequestConfig requestConfig;
-    private CodebeamerApiConfiguration codebeamerApiConfiguration;
 
-    public RestAdapterImpl(CodebeamerApiConfiguration config, HttpClient httpClient) {
-        this.codebeamerApiConfiguration = config;
+    public RestAdapterImpl(HttpClient httpClient) {
         this.client = httpClient != null ? httpClient : buildHttpClient();
         this.requestConfig = buildRequestConfig();
     }
@@ -59,7 +57,7 @@ public class RestAdapterImpl implements RestAdapter {
     private HttpClient buildHttpClient() {
         return HttpClientBuilder
                 .create()
-                .setDefaultHeaders(getDefaultHeaders(codebeamerApiConfiguration.getUsername(), codebeamerApiConfiguration.getPassword()))
+                .setDefaultHeaders(getDefaultHeaders(CodebeamerApiConfiguration.getInstance().getUsername(), CodebeamerApiConfiguration.getInstance().getPassword()))
                 .build();
     }
 
@@ -126,7 +124,7 @@ public class RestAdapterImpl implements RestAdapter {
             logger.info("Connection successful. CodeBeamer Version is " + version.toString());
             return true;
         } catch (ConnectionFailedException ex) {
-            logger.error("Connection not successful. Please check CodeBeamer address: " + codebeamerApiConfiguration.getUri());
+            logger.error("Connection not successful. Please check CodeBeamer address: " + CodebeamerApiConfiguration.getInstance().getUri());
             throw new CodebeamerNotAccessibleException(ex);
         } catch (InvalidCredentialsException ex) {
             logger.error("Connection not successful. Please check the credentials");
@@ -136,6 +134,7 @@ public class RestAdapterImpl implements RestAdapter {
 
     @Override
     public Boolean uploadXUnitResults(File[] files) throws CodebeamerNotAccessibleException {
+        CodebeamerApiConfiguration config = CodebeamerApiConfiguration.getInstance();
         MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
         multipartEntityBuilder.setMode(HttpMultipartMode.STRICT);
         for (File file : files) {
@@ -155,14 +154,14 @@ public class RestAdapterImpl implements RestAdapter {
     }
 
     private String executeGet(String uri) throws CodebeamerNotAccessibleException {
-        HttpGet get = new HttpGet(codebeamerApiConfiguration.getUri() + uri);
+        HttpGet get = new HttpGet(CodebeamerApiConfiguration.getInstance().getUri() + uri);
         get.setConfig(requestConfig);
 
         return executeRest(get);
     }
 
     private String executePost(String uri, HttpEntity entity) throws CodebeamerNotAccessibleException {
-        HttpPost post = new HttpPost(codebeamerApiConfiguration.getUri() + uri);
+        HttpPost post = new HttpPost(CodebeamerApiConfiguration.getInstance().getUri() + uri);
         post.setConfig(requestConfig);
         post.setEntity(entity);
 

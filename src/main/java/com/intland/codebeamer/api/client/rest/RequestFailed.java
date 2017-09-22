@@ -4,7 +4,9 @@
  */
 package com.intland.codebeamer.api.client.rest;
 
-public class RequestFailed extends Exception {
+import java.io.IOException;
+
+public class RequestFailed extends IOException {
     public RequestFailed(String message) {
         super(message);
     }

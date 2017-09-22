@@ -26,6 +26,7 @@ public class XUnitFileCollectorTest {
     File emptyDir;
     File dirWithOneFile;
     File dirWithSixFiles;
+    File dirWithSubDirs;
     private XUnitFileCollector collector;
 
     @BeforeSuite
@@ -34,6 +35,7 @@ public class XUnitFileCollectorTest {
         emptyDir = getEmptyDir();
         dirWithOneFile = getTestResultDirWithOneFile();
         dirWithSixFiles = getTestResultDirWithSixFiles();
+        dirWithSubDirs = getTestResultDirWithSubDirs();
     }
 
     @BeforeMethod
@@ -80,7 +82,26 @@ public class XUnitFileCollectorTest {
 
                 {new File[]{dirWithOneFile, dirWithOneFile}, 1},
                 {new File[]{dirWithOneFile, dirWithOneFile, dirWithSixFiles}, 7},
+
+                {new File[]{dirWithSubDirs}, 3},
+                {new File[]{dirWithNonXmlFile, dirWithSubDirs}, 3},
+                {new File[]{dirWithOneFile, dirWithSubDirs}, 4},
+                {new File[]{dirWithSixFiles, dirWithSubDirs}, 9},
+                {new File[]{dirWithSubDirs, dirWithSubDirs}, 3},
         };
+    }
+
+    private File getTestResultDirWithSubDirs() throws IOException {
+        Path tempDir = Files.createTempDirectory("dir_with_subdirs_");
+        Path sub1 = Files.createDirectory(Paths.get(tempDir + "/sub1"));
+        Path sub2 = Files.createDirectory(Paths.get(tempDir + "/sub2"));
+        logger.debug(tempDir);
+
+        Files.copy(Paths.get(ClassLoader.getSystemResource("test_results/ArtifactRemotingTests.xml").getPath()), Paths.get(tempDir + "/ArtifactRemotingTests.xml"), REPLACE_EXISTING);
+        Files.copy(Paths.get(ClassLoader.getSystemResource("test_results/GeneralRemotingTests.xml").getPath()), Paths.get(sub1 + "/GeneralRemotingTests.xml"), REPLACE_EXISTING);
+        Files.copy(Paths.get(ClassLoader.getSystemResource("test_results/TestManagementRemotingTests.xml").getPath()), Paths.get(sub2 + "/TestManagementRemotingTests.xml"), REPLACE_EXISTING);
+
+        return tempDir.toFile();
     }
 
     private File getTestResultDirWithSixFiles() throws IOException {

@@ -30,6 +30,9 @@ public class XUnitFileCollector {
     public void addDirectory(File dir) {
         if (dir.isDirectory()) {
             directories.add(dir);
+            for (File file: dir.listFiles()) {
+                addDirectory(file);
+            }
         }
     }
 
@@ -44,6 +47,7 @@ public class XUnitFileCollector {
                 builder.append(String.format("File %s%n", files[i].getName()));
             } else {
                 builder.append(String.format("Directory %s%n", files[i].getName()));
+                builder.append(getFileList(new File[]{files[i]}));
             }
         }
         return builder.toString().trim();
@@ -53,18 +57,18 @@ public class XUnitFileCollector {
         return getFiles(directories.toArray(new File[directories.size()]));
     }
 
-    public File[] getFiles(File directory) {
-        try (Stream<File> fileStream = Arrays.stream(directory.listFiles())) {
-            return fileStream.filter(file -> file.getName().endsWith("xml"))
-                    .toArray(File[]::new);
-        }
-    }
-
     public File[] getFiles(File[] directories) {
         File[] allFiles = new File[0];
         for (File directory : directories) {
             allFiles = ArrayUtils.addAll(allFiles, getFiles(directory));
         }
         return allFiles;
+    }
+
+    public File[] getFiles(File directory) {
+        try (Stream<File> fileStream = Arrays.stream(directory.listFiles())) {
+            return fileStream.filter(file -> file.getName().endsWith("xml"))
+                    .toArray(File[]::new);
+        }
     }
 }

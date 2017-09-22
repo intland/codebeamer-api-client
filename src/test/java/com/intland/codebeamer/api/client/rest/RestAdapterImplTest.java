@@ -56,7 +56,7 @@ public class RestAdapterImplTest {
     }
 
     @Test(dataProvider = "trackerItemProvider")
-    public void testGetTrackerItem(int statusCode, String uri, Integer expectedItemId, Class<CodebeamerNotAccessibleException> exceptionClass) throws Exception {
+    public void testGetTrackerItem(int statusCode, String uri, Integer expectedItemId, Class<RequestFailed> exceptionClass) throws Exception {
         TrackerItemDto expectedItemDto = new TrackerItemDto();
         expectedItemDto.setUri(uri);
         HttpEntity entity = new StringEntity(objectMapper.writeValueAsString(expectedItemDto));
@@ -70,7 +70,7 @@ public class RestAdapterImplTest {
         try {
             TrackerItemDto actual = rest.getTrackerItem(1);
             Assert.assertEquals(actual.getId(), expectedItemId, "id must match");
-        } catch (CodebeamerNotAccessibleException ex) {
+        } catch (RequestFailed ex) {
             checkException(ex, exceptionClass, statusCode);
         }
     }
@@ -85,7 +85,7 @@ public class RestAdapterImplTest {
     }
 
     @Test(dataProvider = "trackerProvider")
-    public void testGetTracker(int statusCode, String content, Integer trackerTypeId, String trackerTypeName, Class<CodebeamerNotAccessibleException> exceptionClass) throws Exception {
+    public void testGetTracker(int statusCode, String content, Integer trackerTypeId, String trackerTypeName, Class<RequestFailed> exceptionClass) throws Exception {
         HttpEntity entity = new StringEntity(content);
 
         when(statusLineMock.getStatusCode()).thenReturn(statusCode);
@@ -98,7 +98,7 @@ public class RestAdapterImplTest {
             TrackerDto actual = rest.getTracker(1);
             Assert.assertEquals(actual.getType().getTypeId(), trackerTypeId, "tracker type id");
             Assert.assertEquals(actual.getType().getName(), trackerTypeName, "tracker type name");
-        } catch (CodebeamerNotAccessibleException ex) {
+        } catch (RequestFailed ex) {
             checkException(ex, exceptionClass, statusCode);
         }
     }
@@ -113,7 +113,7 @@ public class RestAdapterImplTest {
     }
 
     @Test(dataProvider = "trackerTypeProvider")
-    public void testGetTrackerType(int statusCode, String uri, String name, Integer expectedId, Class<CodebeamerNotAccessibleException> exceptionClass) throws Exception {
+    public void testGetTrackerType(int statusCode, String uri, String name, Integer expectedId, Class<RequestFailed> exceptionClass) throws Exception {
         TrackerTypeDto expectedTypeDto = new TrackerTypeDto();
         expectedTypeDto.setUri(uri);
         expectedTypeDto.setName(name);
@@ -132,7 +132,7 @@ public class RestAdapterImplTest {
             TrackerTypeDto actual = rest.getTrackerType(expectedId);
             Assert.assertEquals(actual.getTypeId(), expectedId, "tracker type id");
             Assert.assertEquals(actual.getName(), name, "tracker type name");
-        } catch (CodebeamerNotAccessibleException ex) {
+        } catch (RequestFailed ex) {
             checkException(ex, exceptionClass, statusCode);
         }
     }
@@ -146,7 +146,7 @@ public class RestAdapterImplTest {
         };
     }
 
-    private void checkException(Exception actual, Class<CodebeamerNotAccessibleException> expected, int statusCode) throws Exception {
+    private void checkException(Exception actual, Class<RequestFailed> expected, int statusCode) throws Exception {
         Assert.assertEquals(actual.getClass().getSimpleName(), expected.getSimpleName(), "Statuscode " + statusCode);
     }
 
@@ -167,7 +167,7 @@ public class RestAdapterImplTest {
         Assert.assertTrue(rest.getVersion() instanceof Version);
     }
 
-    @Test(expectedExceptions = {CodebeamerNotAccessibleException.class, ConnectionFailedException.class})
+    @Test(expectedExceptions = {RequestFailed.class, ConnectionFailedException.class})
     public void testGetVersion_withIncorrectEndpoint_shouldThrowException() throws Exception {
         HttpClient client = mock(HttpClient.class);
         when(client.execute(Mockito.any(HttpGet.class))).thenThrow(new IOException("simulated timeout"));
@@ -176,7 +176,7 @@ public class RestAdapterImplTest {
         rest.getVersion();
     }
 
-    @Test(expectedExceptions = {CodebeamerNotAccessibleException.class, InvalidCredentialsException.class})
+    @Test(expectedExceptions = {RequestFailed.class, InvalidCredentialsException.class})
     public void testGetVersion_withCorrectEndpoint_WithIncorrectCredentials() throws Exception {
         HttpClient client = mock(HttpClient.class);
         HttpResponse response = mock(HttpResponse.class);
@@ -206,7 +206,7 @@ public class RestAdapterImplTest {
         Assert.assertTrue(rest.testConnection(), "connection test");
     }
 
-    @Test(expectedExceptions = {CodebeamerNotAccessibleException.class, InvalidCredentialsException.class})
+    @Test(expectedExceptions = {RequestFailed.class, InvalidCredentialsException.class})
     public void testTestConnection_CodebeamerReturns401() throws Exception {
         HttpClient client = mock(HttpClient.class);
         HttpResponse response = mock(HttpResponse.class);
@@ -220,7 +220,7 @@ public class RestAdapterImplTest {
         Assert.assertFalse(rest.testConnection(), "connection test");
     }
 
-    @Test(expectedExceptions = {CodebeamerNotAccessibleException.class, ConnectionFailedException.class})
+    @Test(expectedExceptions = {RequestFailed.class, ConnectionFailedException.class})
     public void testTestConnection_CodebeamerTimesOut() throws Exception {
         HttpClient client = mock(HttpClient.class);
 

@@ -8,15 +8,15 @@ import com.intland.codebeamer.api.client.dto.TrackerTypeDto;
 import java.io.File;
 
 public interface RestAdapter {
-    Version getVersion() throws CodebeamerNotAccessibleException;
+    Version getVersion() throws RequestFailed;
 
-    Boolean testConnection() throws CodebeamerNotAccessibleException;
+    Boolean testConnection() throws RequestFailed;
 
-    TrackerItemDto getTrackerItem(Integer id) throws CodebeamerNotAccessibleException;
+    TrackerItemDto getTrackerItem(Integer id) throws RequestFailed;
 
-    TrackerDto getTracker(Integer id) throws CodebeamerNotAccessibleException;
+    TrackerDto getTracker(Integer id) throws RequestFailed;
 
-    TrackerTypeDto getTrackerType(Integer id) throws CodebeamerNotAccessibleException;
+    TrackerTypeDto getTrackerType(Integer id) throws RequestFailed;
 
-    Boolean uploadXUnitResults(File[] files) throws CodebeamerNotAccessibleException;
+    Boolean uploadXUnitResults(File[] files) throws RequestFailed;
 }

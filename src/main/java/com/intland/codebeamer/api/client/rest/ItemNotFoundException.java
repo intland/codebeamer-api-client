@@ -4,7 +4,7 @@
  */
 package com.intland.codebeamer.api.client.rest;
 
-public class ItemNotFoundException extends CodebeamerNotAccessibleException {
+public class ItemNotFoundException extends RequestFailed {
     public ItemNotFoundException(String message) {
         super(message);
     }

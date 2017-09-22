@@ -4,7 +4,7 @@
  */
 package com.intland.codebeamer.api.client.rest;
 
-public class ConnectionFailedException extends CodebeamerNotAccessibleException {
+public class ConnectionFailedException extends RequestFailed {
     public ConnectionFailedException(String message) {
         super(message);
     }

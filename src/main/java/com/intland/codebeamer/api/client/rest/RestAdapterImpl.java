@@ -77,14 +77,14 @@ public class RestAdapterImpl implements RestAdapter {
     }
 
     @Override
-    public Version getVersion() throws CodebeamerNotAccessibleException {
+    public Version getVersion() throws RequestFailed {
         String uri = String.format("%s/version", REST_PATH);
         String response = executeGet(uri);
         return Version.getVersionFromString(response);
     }
 
     @Override
-    public TrackerItemDto getTrackerItem(Integer id) throws CodebeamerNotAccessibleException {
+    public TrackerItemDto getTrackerItem(Integer id) throws RequestFailed {
         String uri = String.format("%s/item/%s", REST_PATH, id);
         String response = executeGet(uri);
         try {
@@ -96,7 +96,7 @@ public class RestAdapterImpl implements RestAdapter {
     }
 
     @Override
-    public TrackerDto getTracker(Integer id) throws CodebeamerNotAccessibleException {
+    public TrackerDto getTracker(Integer id) throws RequestFailed {
         String uri = String.format("%s/tracker/%s", REST_PATH, id);
         String response = executeGet(uri);
         try {
@@ -108,7 +108,7 @@ public class RestAdapterImpl implements RestAdapter {
     }
 
     @Override
-    public TrackerTypeDto getTrackerType(Integer id) throws CodebeamerNotAccessibleException {
+    public TrackerTypeDto getTrackerType(Integer id) throws RequestFailed {
         String uri = String.format("%s/tracker/type/%s", REST_PATH, id);
         String response = executeGet(uri);
         try {
@@ -120,22 +120,22 @@ public class RestAdapterImpl implements RestAdapter {
     }
 
     @Override
-    public Boolean testConnection() throws CodebeamerNotAccessibleException {
+    public Boolean testConnection() throws RequestFailed {
         try {
             Version version = getVersion();
             logger.info("Connection successful. CodeBeamer Version is " + version.toString());
             return true;
         } catch (ConnectionFailedException ex) {
             logger.error("Connection not successful. Please check CodeBeamer address: " + CodebeamerApiConfiguration.getInstance().getUri());
-            throw new CodebeamerNotAccessibleException(ex);
+            throw new RequestFailed(ex);
         } catch (InvalidCredentialsException ex) {
             logger.error("Connection not successful. Please check the credentials");
-            throw new CodebeamerNotAccessibleException(ex);
+            throw new RequestFailed(ex);
         }
     }
 
     @Override
-    public Boolean uploadXUnitResults(File[] files) throws CodebeamerNotAccessibleException {
+    public Boolean uploadXUnitResults(File[] files) throws RequestFailed {
         MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
         multipartEntityBuilder.setMode(HttpMultipartMode.STRICT);
 
@@ -156,20 +156,20 @@ public class RestAdapterImpl implements RestAdapter {
         try {
             executePost("/invalid", entity);
             return true;
-        } catch (CodebeamerNotAccessibleException ex) {
+        } catch (RequestFailed ex) {
             logger.error(ex);
             return false;
         }
     }
 
-    private String executeGet(String uri) throws CodebeamerNotAccessibleException {
+    private String executeGet(String uri) throws RequestFailed {
         HttpGet get = new HttpGet(CodebeamerApiConfiguration.getInstance().getUri() + uri);
         get.setConfig(requestConfig);
 
         return executeRest(get);
     }
 
-    private String executePost(String uri, HttpEntity entity) throws CodebeamerNotAccessibleException {
+    private String executePost(String uri, HttpEntity entity) throws RequestFailed {
         HttpPost post = new HttpPost(CodebeamerApiConfiguration.getInstance().getUri() + uri);
         post.setConfig(requestConfig);
         post.setEntity(entity);
@@ -177,7 +177,7 @@ public class RestAdapterImpl implements RestAdapter {
         return executeRest(post);
     }
 
-    private String executeRest(HttpRequestBase request) throws CodebeamerNotAccessibleException {
+    private String executeRest(HttpRequestBase request) throws RequestFailed {
         assert client != null;
         logger.debug(String.format("%s-request to %s", request.getMethod(), request.getURI()));
         try {

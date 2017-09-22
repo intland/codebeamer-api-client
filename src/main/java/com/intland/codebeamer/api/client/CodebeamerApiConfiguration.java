@@ -4,12 +4,18 @@
  */
 package com.intland.codebeamer.api.client;
 
+import com.intland.codebeamer.api.client.dto.TestResultConfigurationDto;
+
 public class CodebeamerApiConfiguration {
     private static CodebeamerApiConfiguration instance = null;
     private String uri;
     private String username;
     private String password;
 
+    private Integer testConfigurationId;
+    private Integer testCaseTrackerId;
+    private Integer testSetTrackerId;
+    private Integer testRunTrackerId;
 
     private CodebeamerApiConfiguration() {
 
@@ -47,5 +53,50 @@ public class CodebeamerApiConfiguration {
     public CodebeamerApiConfiguration withPassword(String password) {
         this.password = password;
         return this;
+    }
+
+    public Integer getTestConfigurationId() {
+        return testConfigurationId;
+    }
+
+    public CodebeamerApiConfiguration withTestConfigurationId(Integer id) {
+        this.testConfigurationId = id;
+        return this;
+    }
+
+    public Integer getTestCaseTrackerId() {
+        return testCaseTrackerId;
+    }
+
+    public CodebeamerApiConfiguration withTestCaseTrackerId(Integer id) {
+        this.testCaseTrackerId = id;
+        return this;
+    }
+
+    public Integer getTestSetTrackerId() {
+        return testSetTrackerId;
+    }
+
+    public CodebeamerApiConfiguration withTestSetTrackerId(Integer id) {
+        this.testSetTrackerId = id;
+        return this;
+    }
+
+    public Integer getTestRunTrackerId() {
+        return testRunTrackerId;
+    }
+
+    public CodebeamerApiConfiguration withTestRunTrackerId(Integer id) {
+        this.testRunTrackerId = id;
+        return this;
+    }
+
+    public TestResultConfigurationDto getTestResultConfigurationDto() {
+        TestResultConfigurationDto configurationDto = new TestResultConfigurationDto();
+        configurationDto.setTestConfigurationId(testConfigurationId);
+        configurationDto.setTestCaseTrackerId(testCaseTrackerId);
+        configurationDto.setTestSetTrackerId(testSetTrackerId);
+        configurationDto.setTestRunTrackerId(testRunTrackerId);
+        return configurationDto;
     }
 }

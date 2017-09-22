@@ -48,7 +48,11 @@ public class RestAdapterImplTest {
         CodebeamerApiConfiguration.getInstance()
                 .withUri("http://localhost:8080/cb")
                 .withUsername("bond")
-                .withPassword("007");
+                .withPassword("007")
+                .withTestConfigurationId(10)
+                .withTestCaseTrackerId(20)
+                .withTestSetTrackerId(30)
+                .withTestRunTrackerId(40);
     }
 
     @Test(dataProvider = "trackerItemProvider")
@@ -252,6 +256,7 @@ public class RestAdapterImplTest {
         List<HttpPost> posts = requestCaptor.getAllValues();
         for (HttpPost post : posts) {
             checkUploadedEntity(post.getEntity(), files);
+            checkConfigurationIsIncluded(post.getEntity());
         }
     }
 
@@ -277,5 +282,14 @@ public class RestAdapterImplTest {
             Assert.assertTrue(body.contains(fileContent), String.format("body contains content of %s", file.getName()));
         }
         Assert.assertTrue(totalFileSize < entity.getContentLength(), "entity length is greater than combined file size");
+    }
+
+    private void checkConfigurationIsIncluded(HttpEntity entity) throws Exception {
+        String body = IOUtils.toString(entity.getContent(), Charsets.UTF_8);
+        CodebeamerApiConfiguration config = CodebeamerApiConfiguration.getInstance();
+        Assert.assertTrue(body.contains(String.format("\"testConfigurationId\":%s", config.getTestConfigurationId())), "testConfigurationId is included");
+        Assert.assertTrue(body.contains(String.format("\"testSetTrackerId\":%s", config.getTestSetTrackerId())), "testSetTrackerId is included");
+        Assert.assertTrue(body.contains(String.format("\"testCaseTrackerId\":%s", config.getTestCaseTrackerId())), "testCaseTrackerId is included");
+        Assert.assertTrue(body.contains(String.format("\"testRunTrackerId\":%s", config.getTestRunTrackerId())), "testRunTrackerId is included");
     }
 }

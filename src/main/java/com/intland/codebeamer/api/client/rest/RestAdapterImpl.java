@@ -5,9 +5,11 @@
 
 package com.intland.codebeamer.api.client.rest;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.intland.codebeamer.api.client.CodebeamerApiConfiguration;
 import com.intland.codebeamer.api.client.Version;
+import com.intland.codebeamer.api.client.dto.TestResultConfigurationDto;
 import com.intland.codebeamer.api.client.dto.TrackerDto;
 import com.intland.codebeamer.api.client.dto.TrackerItemDto;
 import com.intland.codebeamer.api.client.dto.TrackerTypeDto;
@@ -19,9 +21,9 @@ import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicHeader;
@@ -134,15 +136,22 @@ public class RestAdapterImpl implements RestAdapter {
 
     @Override
     public Boolean uploadXUnitResults(File[] files) throws CodebeamerNotAccessibleException {
-        CodebeamerApiConfiguration config = CodebeamerApiConfiguration.getInstance();
         MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
         multipartEntityBuilder.setMode(HttpMultipartMode.STRICT);
-        for (File file : files) {
-            String fileName = file.getName();
-            FileBody fileBody = new FileBody(file);
-            logger.info(String.format("preparing to upload %s with a size of %d bytes...", fileName, file.length()));
-            multipartEntityBuilder.addPart(fileName, fileBody);
+
+        TestResultConfigurationDto configurationDto = CodebeamerApiConfiguration.getInstance().getTestResultConfigurationDto();
+        try {
+            multipartEntityBuilder.addTextBody("configuration", objectMapper.writeValueAsString(configurationDto), ContentType.APPLICATION_JSON);
+        } catch (JsonProcessingException ex) {
+            logger.error(ex);
+            return false;
         }
+
+        for (File file : files) {
+            logger.info(String.format("preparing to upload %s with a size of %d bytes...", file.getName(), file.length()));
+            multipartEntityBuilder.addBinaryBody(file.getName(), file);
+        }
+
         HttpEntity entity = multipartEntityBuilder.build();
         try {
             executePost("/invalid", entity);

@@ -222,86 +222,49 @@ public class RestAdapterImplTest {
 
         when(client.execute(Mockito.any(HttpGet.class))).thenThrow(new IOException("simulated timeout"));
 
-        RestAdapter rest = new RestAdapterImpl(getDummyConfig(), client);
+        RestAdapter rest = new RestAdapterImpl(client);
         Assert.assertFalse(rest.testConnection(), "connection test");
     }
 
     @Test(dataProvider = "fileListProvider")
-    public void testUploadXUnitResults_checkResult_CodebeamerReturns201(File[] files) throws Exception {
-        HttpClient client = mock(HttpClient.class);
-        HttpResponse response = mock(HttpResponse.class);
-        StatusLine statusLine = mock(StatusLine.class);
-
-        when(statusLine.getStatusCode()).thenReturn(HttpStatus.SC_CREATED);
-        when(response.getStatusLine()).thenReturn(statusLine);
-        when(client.execute(Mockito.any(HttpPost.class))).thenReturn(response);
-
-        RestAdapter rest = new RestAdapterImpl(getDummyConfig(), client);
-        Assert.assertTrue(rest.uploadXUnitResults(files), "was upload successful");
-    }
-
-    @Test(dataProvider = "fileListProvider")
-    public void testUploadXUnitResults_checkResult_CodebeamerReturn401(File[] files) throws Exception {
-        HttpClient client = mock(HttpClient.class);
-        HttpResponse response = mock(HttpResponse.class);
-        StatusLine statusLine = mock(StatusLine.class);
-
-        when(statusLine.getStatusCode()).thenReturn(HttpStatus.SC_UNAUTHORIZED);
-        when(response.getStatusLine()).thenReturn(statusLine);
-        when(client.execute(Mockito.any(HttpPost.class))).thenReturn(response);
-
-        RestAdapter rest = new RestAdapterImpl(getDummyConfig(), client);
-        Assert.assertFalse(rest.uploadXUnitResults(files), "was upload successful");
-    }
-
-    @Test(dataProvider = "fileListProvider")
-    public void testUploadXUnitResults_checkNumberOfRequests(File[] files) throws Exception {
-        logger.info(String.format("testing uploadXUnitResults with %d files", files.length));
-
-        HttpClient client = mock(HttpClient.class);
-        HttpResponse response = mock(HttpResponse.class);
-        StatusLine statusLine = mock(StatusLine.class);
-
-        when(statusLine.getStatusCode()).thenReturn(HttpStatus.SC_CREATED);
-        when(response.getStatusLine()).thenReturn(statusLine);
-        when(client.execute(Mockito.any(HttpPost.class))).thenReturn(response);
-
-        RestAdapter rest = new RestAdapterImpl(getDummyConfig(), client);
-        rest.uploadXUnitResults(files);
-
-        Mockito.verify(client, times(1)).execute(Mockito.any(HttpPost.class));
-    }
-
-    @Test(dataProvider = "fileListProvider")
-    public void testUploadXUnitResults_checkContent(File[] files) throws Exception {
+    public void testUploadXUnitResults(File[] files, int statusCode, int numberOfRequest) throws Exception {
         ArgumentCaptor<HttpPost> requestCaptor = ArgumentCaptor.forClass(HttpPost.class);
-        HttpClient client = mock(HttpClient.class);
-        HttpResponse response = mock(HttpResponse.class);
-        StatusLine statusLine = mock(StatusLine.class);
 
-        when(statusLine.getStatusCode()).thenReturn(HttpStatus.SC_CREATED);
-        when(response.getStatusLine()).thenReturn(statusLine);
-        when(client.execute(Mockito.any(HttpPost.class))).thenReturn(response);
+        when(statusLineMock.getStatusCode()).thenReturn(statusCode);
+        when(responseMock.getStatusLine()).thenReturn(statusLineMock);
+        when(clientMock.execute(Mockito.any(HttpPost.class))).thenReturn(responseMock);
 
-        RestAdapter rest = new RestAdapterImpl(getDummyConfig(), client);
-        rest.uploadXUnitResults(files);
+        RestAdapter rest = new RestAdapterImpl(clientMock);
 
-        Mockito.verify(client, times(1)).execute(requestCaptor.capture());
+        // check whether successful
+        if (statusCode >= 200 && statusCode < 300) {
+            Assert.assertTrue(rest.uploadXUnitResults(files), "was upload successful");
+        }
+        if (statusCode >= 400 && statusCode < 500) {
+            Assert.assertFalse(rest.uploadXUnitResults(files), "was upload successful");
+        }
+
+        // check number of requests
+        Mockito.verify(clientMock, times(numberOfRequest)).execute(Mockito.any(HttpPost.class));
+
+        // check content of request
+        Mockito.verify(clientMock, times(numberOfRequest)).execute(requestCaptor.capture());
         List<HttpPost> posts = requestCaptor.getAllValues();
-
         for (HttpPost post : posts) {
             checkUploadedEntity(post.getEntity(), files);
         }
     }
 
     @DataProvider(name = "fileListProvider")
-    private Object[][] getFileListWithOneFile() {
+    private Object[][] fileListProvider() {
         File one = new File(ClassLoader.getSystemResource("test_results/AclRemotingTests.xml").getFile());
         File two = new File(ClassLoader.getSystemResource("test_results/ArtifactRemotingTests.xml").getFile());
         File three = new File(ClassLoader.getSystemResource("test_results/GeneralRemotingTests.xml").getFile());
         return new Object[][]{
-                {new File[]{one}},
-                {new File[]{one, two, three}},
+                {new File[]{one}, HttpStatus.SC_CREATED, 1},
+                {new File[]{one}, HttpStatus.SC_UNAUTHORIZED, 1},
+                {new File[]{one, two, three}, HttpStatus.SC_CREATED, 1},
+                {new File[]{one, two, three}, HttpStatus.SC_UNAUTHORIZED, 1},
         };
     }
 

@@ -120,22 +120,36 @@ public class RestAdapterImpl implements RestAdapter {
     }
 
     @Override
-    public Boolean testConnection() throws RequestFailed {
+    public boolean testConnection() {
+        try {
+            executeGet("");
+            return true;
+        } catch (IOException ex) {
+            logger.debug(ex);
+            return false;
+        }
+    }
+
+    @Override
+    public boolean testCredentials() {
         try {
             Version version = getVersion();
             logger.info("Connection successful. CodeBeamer Version is " + version.toString());
             return true;
         } catch (ConnectionFailedException ex) {
             logger.error("Connection not successful. Please check CodeBeamer address: " + CodebeamerApiConfiguration.getInstance().getUri());
-            throw new RequestFailed(ex);
+            return false;
         } catch (InvalidCredentialsException ex) {
             logger.error("Connection not successful. Please check the credentials");
-            throw new RequestFailed(ex);
+            return false;
+        } catch (RequestFailed ex) {
+            logger.error(ex);
+            return false;
         }
     }
 
     @Override
-    public Boolean uploadXUnitResults(File[] files) throws RequestFailed {
+    public void uploadXUnitResults(File[] files) throws RequestFailed {
         MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
         multipartEntityBuilder.setMode(HttpMultipartMode.STRICT);
 
@@ -144,7 +158,7 @@ public class RestAdapterImpl implements RestAdapter {
             multipartEntityBuilder.addTextBody("configuration", objectMapper.writeValueAsString(configurationDto), ContentType.APPLICATION_JSON);
         } catch (JsonProcessingException ex) {
             logger.error(ex);
-            return false;
+            throw new RequestFailed(ex);
         }
 
         for (File file : files) {
@@ -155,10 +169,9 @@ public class RestAdapterImpl implements RestAdapter {
         HttpEntity entity = multipartEntityBuilder.build();
         try {
             executePost("/invalid", entity);
-            return true;
         } catch (RequestFailed ex) {
             logger.error(ex);
-            return false;
+            throw ex;
         }
     }
 
@@ -180,8 +193,9 @@ public class RestAdapterImpl implements RestAdapter {
     private String executeRest(HttpRequestBase request) throws RequestFailed {
         assert client != null;
         logger.debug(String.format("%s-request to %s", request.getMethod(), request.getURI()));
+        HttpResponse response = null;
         try {
-            HttpResponse response = client.execute(request);
+            response = client.execute(request);
             if (response.getStatusLine().getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
                 throw new InvalidCredentialsException("incorrect credentials");
             }
@@ -189,6 +203,8 @@ public class RestAdapterImpl implements RestAdapter {
                 throw new ItemNotFoundException("cannot find item");
             }
             return new BasicResponseHandler().handleResponse(response);
+        } catch (RequestFailed ex) {
+            throw ex;
         } catch (IOException ex) {
             throw new ConnectionFailedException(String.format("%s-request to %s timed out", request.getConfig(), request.getURI()), ex);
         } finally {

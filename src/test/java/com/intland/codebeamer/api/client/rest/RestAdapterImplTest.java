@@ -78,9 +78,9 @@ public class RestAdapterImplTest {
     @DataProvider(name = "trackerItemProvider")
     public Object[][] trackerItemProvider() {
         return new Object[][]{
-                {200, "/item/1", 1, null},
-                {401, "/item/1", 1, InvalidCredentialsException.class},
-                {404, "/item/1", 1, ItemNotFoundException.class},
+                {HttpStatus.SC_OK, "/item/1", 1, null},
+                {HttpStatus.SC_UNAUTHORIZED, "/item/1", 1, InvalidCredentialsException.class},
+                {HttpStatus.SC_NOT_FOUND, "/item/1", 1, ItemNotFoundException.class},
         };
     }
 
@@ -106,9 +106,9 @@ public class RestAdapterImplTest {
     @DataProvider(name = "trackerProvider")
     public Object[][] trackerProvider() {
         return new Object[][]{
-                {200, "{\"type\":{\"uri\":\"/category/type/1\", \"name\":\"Dummy Name\"}}", 1, "Dummy Name", null},
-                {401, "{\"type\":{\"uri\":\"/category/type/1\", \"name\":\"Dummy Name\"}}", 1, "Dummy Name", InvalidCredentialsException.class},
-                {404, "{\"type\":{\"uri\":\"/category/type/1\", \"name\":\"Dummy Name\"}}", 1, "Dummy Name", ItemNotFoundException.class},
+                {HttpStatus.SC_OK, "{\"type\":{\"uri\":\"/category/type/1\", \"name\":\"Dummy Name\"}}", 1, "Dummy Name", null},
+                {HttpStatus.SC_UNAUTHORIZED, "{\"type\":{\"uri\":\"/category/type/1\", \"name\":\"Dummy Name\"}}", 1, "Dummy Name", InvalidCredentialsException.class},
+                {HttpStatus.SC_NOT_FOUND, "{\"type\":{\"uri\":\"/category/type/1\", \"name\":\"Dummy Name\"}}", 1, "Dummy Name", ItemNotFoundException.class},
         };
     }
 
@@ -140,9 +140,9 @@ public class RestAdapterImplTest {
     @DataProvider(name = "trackerTypeProvider")
     public Object[][] trackerTypeProvider() {
         return new Object[][]{
-                {200, "/tracker/type/1", "Dummy Name", 1, null},
-                {401, "/tracker/type/1", "Dummy Name", 1, InvalidCredentialsException.class},
-                {404, "/tracker/type/1", "Dummy Name", 1, ItemNotFoundException.class},
+                {HttpStatus.SC_OK, "/tracker/type/1", "Dummy Name", 1, null},
+                {HttpStatus.SC_UNAUTHORIZED, "/tracker/type/1", "Dummy Name", 1, InvalidCredentialsException.class},
+                {HttpStatus.SC_NOT_FOUND, "/tracker/type/1", "Dummy Name", 1, ItemNotFoundException.class},
         };
     }
 
@@ -190,44 +190,48 @@ public class RestAdapterImplTest {
         rest.getVersion();
     }
 
-    @Test
-    public void testTestConnection_CodebeamerReturns200() throws Exception {
-        HttpClient client = mock(HttpClient.class);
-        HttpResponse response = mock(HttpResponse.class);
-        HttpEntity entity = new StringEntity("\"8.3.0\"");
-        StatusLine statusLine = mock(StatusLine.class);
+    @Test(dataProvider = "testConnectionProvider")
+    public void testTestConnection(boolean expected) throws Exception {
+        if (expected) {
+            when(statusLineMock.getStatusCode()).thenReturn(HttpStatus.SC_OK);
+            when(responseMock.getStatusLine()).thenReturn(statusLineMock);
+            when(responseMock.getEntity()).thenReturn(new StringEntity(""));
+            when(clientMock.execute(Mockito.any(HttpGet.class))).thenReturn(responseMock);
+        } else {
+            when(clientMock.execute(Mockito.any(HttpGet.class))).thenThrow(new IOException("simulated timeout"));
+        }
 
-        when(statusLine.getStatusCode()).thenReturn(HttpStatus.SC_OK);
-        when(response.getStatusLine()).thenReturn(statusLine);
-        when(response.getEntity()).thenReturn(entity);
-        when(client.execute(Mockito.any(HttpGet.class))).thenReturn(response);
-
-        RestAdapter rest = new RestAdapterImpl(client);
-        Assert.assertTrue(rest.testConnection(), "connection test");
+        RestAdapter rest = new RestAdapterImpl(clientMock);
+        Assert.assertEquals(rest.testConnection(), expected, "test connection");
     }
 
-    @Test(expectedExceptions = {RequestFailed.class, InvalidCredentialsException.class})
-    public void testTestConnection_CodebeamerReturns401() throws Exception {
-        HttpClient client = mock(HttpClient.class);
-        HttpResponse response = mock(HttpResponse.class);
-        StatusLine statusLine = mock(StatusLine.class);
-
-        when(statusLine.getStatusCode()).thenReturn(HttpStatus.SC_UNAUTHORIZED);
-        when(response.getStatusLine()).thenReturn(statusLine);
-        when(client.execute(Mockito.any(HttpGet.class))).thenReturn(response);
-
-        RestAdapter rest = new RestAdapterImpl(client);
-        Assert.assertFalse(rest.testConnection(), "connection test");
+    @DataProvider(name = "testConnectionProvider")
+    private Object[][] testConnectionProvider() {
+        return new Object[][]{
+                {true},
+                {false},
+        };
     }
 
-    @Test(expectedExceptions = {RequestFailed.class, ConnectionFailedException.class})
-    public void testTestConnection_CodebeamerTimesOut() throws Exception {
-        HttpClient client = mock(HttpClient.class);
+    @Test(dataProvider = "testCredentialsProvider")
+    public void testTestCredentials(int statusCode, boolean expected) throws Exception {
+        when(statusLineMock.getStatusCode()).thenReturn(statusCode);
+        when(responseMock.getStatusLine()).thenReturn(statusLineMock);
+        when(responseMock.getEntity()).thenReturn(new StringEntity("\"8.3.0\""));
+        when(clientMock.execute(Mockito.any(HttpGet.class))).thenReturn(responseMock);
 
-        when(client.execute(Mockito.any(HttpGet.class))).thenThrow(new IOException("simulated timeout"));
+        RestAdapter rest = new RestAdapterImpl(clientMock);
 
-        RestAdapter rest = new RestAdapterImpl(client);
-        Assert.assertFalse(rest.testConnection(), "connection test");
+        Assert.assertEquals(rest.testCredentials(), expected, "test credentials");
+    }
+
+    @DataProvider(name = "testCredentialsProvider")
+    private Object[][] testCredentialsProvider() {
+        return new Object[][]{
+                {HttpStatus.SC_OK, true},
+                {HttpStatus.SC_UNAUTHORIZED, false},
+                {HttpStatus.SC_NOT_FOUND, false},
+        };
     }
 
     @Test(dataProvider = "fileListProvider")
@@ -242,10 +246,15 @@ public class RestAdapterImplTest {
 
         // check whether successful
         if (statusCode >= 200 && statusCode < 300) {
-            Assert.assertTrue(rest.uploadXUnitResults(files), "was upload successful");
-        }
-        if (statusCode >= 400 && statusCode < 500) {
-            Assert.assertFalse(rest.uploadXUnitResults(files), "was upload successful");
+            rest.uploadXUnitResults(files);
+            Assert.assertTrue(true, "upload was successful");
+        } else {
+            try {
+                rest.uploadXUnitResults(files);
+                Assert.assertFalse(true, "upload was successful");
+            } catch (RequestFailed ex) {
+                // swallow
+            }
         }
 
         // check number of requests

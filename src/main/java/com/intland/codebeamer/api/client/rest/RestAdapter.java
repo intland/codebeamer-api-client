@@ -10,7 +10,9 @@ import java.io.File;
 public interface RestAdapter {
     Version getVersion() throws RequestFailed;
 
-    Boolean testConnection() throws RequestFailed;
+    boolean testConnection();
+
+    boolean testCredentials();
 
     TrackerItemDto getTrackerItem(Integer id) throws RequestFailed;
 
@@ -18,5 +20,5 @@ public interface RestAdapter {
 
     TrackerTypeDto getTrackerType(Integer id) throws RequestFailed;
 
-    Boolean uploadXUnitResults(File[] files) throws RequestFailed;
+    void uploadXUnitResults(File[] files) throws RequestFailed;
 }

@@ -144,7 +144,7 @@ public class RestAdapterImpl implements RestAdapter {
 
     @Override
     public void uploadXUnitResults(File[] files) throws RequestFailed {
-        String uri = String.format("%s/testresults", REST_PATH);
+        String uri = String.format("%s/xunitresults", REST_PATH);
         MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
         multipartEntityBuilder.setMode(HttpMultipartMode.STRICT);
 

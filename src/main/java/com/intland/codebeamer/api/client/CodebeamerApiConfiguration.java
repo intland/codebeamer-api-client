@@ -4,7 +4,7 @@
  */
 package com.intland.codebeamer.api.client;
 
-import com.intland.codebeamer.api.client.dto.TestResultConfigurationDto;
+import com.intland.codebeamer.api.client.dto.TestResultContextDto;
 
 public class CodebeamerApiConfiguration {
     private static CodebeamerApiConfiguration instance = null;
@@ -16,6 +16,8 @@ public class CodebeamerApiConfiguration {
     private Integer testCaseTrackerId;
     private Integer testSetTrackerId;
     private Integer testRunTrackerId;
+
+    private String buildIdentifier;
 
     private CodebeamerApiConfiguration() {
 
@@ -91,12 +93,22 @@ public class CodebeamerApiConfiguration {
         return this;
     }
 
-    public TestResultConfigurationDto getTestResultConfigurationDto() {
-        TestResultConfigurationDto configurationDto = new TestResultConfigurationDto();
+    public String getBuildIdentifier() {
+        return buildIdentifier;
+    }
+
+    public CodebeamerApiConfiguration withBuildIdentifier(String buildIdentifier) {
+        this.buildIdentifier = buildIdentifier;
+        return this;
+    }
+
+    public TestResultContextDto getTestResultConfigurationDto() {
+        TestResultContextDto configurationDto = new TestResultContextDto();
         configurationDto.setTestConfigurationId(testConfigurationId);
         configurationDto.setTestCaseTrackerId(testCaseTrackerId);
         configurationDto.setTestSetTrackerId(testSetTrackerId);
         configurationDto.setTestRunTrackerId(testRunTrackerId);
+        configurationDto.setBuildIdentifier(buildIdentifier);
         return configurationDto;
     }
 }

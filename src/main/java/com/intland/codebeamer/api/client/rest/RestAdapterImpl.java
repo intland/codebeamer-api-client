@@ -9,7 +9,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.intland.codebeamer.api.client.CodebeamerApiConfiguration;
 import com.intland.codebeamer.api.client.Version;
-import com.intland.codebeamer.api.client.dto.TestResultConfigurationDto;
+import com.intland.codebeamer.api.client.dto.TestResultContextDto;
 import com.intland.codebeamer.api.client.dto.TrackerDto;
 import com.intland.codebeamer.api.client.dto.TrackerItemDto;
 import com.intland.codebeamer.api.client.dto.TrackerTypeDto;
@@ -144,10 +144,11 @@ public class RestAdapterImpl implements RestAdapter {
 
     @Override
     public void uploadXUnitResults(File[] files) throws RequestFailed {
+        String uri = String.format("%s/testresults", REST_PATH);
         MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
         multipartEntityBuilder.setMode(HttpMultipartMode.STRICT);
 
-        TestResultConfigurationDto configurationDto = CodebeamerApiConfiguration.getInstance().getTestResultConfigurationDto();
+        TestResultContextDto configurationDto = CodebeamerApiConfiguration.getInstance().getTestResultConfigurationDto();
         try {
             multipartEntityBuilder.addTextBody("configuration", objectMapper.writeValueAsString(configurationDto), ContentType.APPLICATION_JSON);
         } catch (JsonProcessingException ex) {
@@ -162,7 +163,7 @@ public class RestAdapterImpl implements RestAdapter {
 
         HttpEntity entity = multipartEntityBuilder.build();
         try {
-            executePost("/invalid", entity);
+            executePost(uri, entity);
         } catch (RequestFailed ex) {
             logger.error(ex);
             throw ex;

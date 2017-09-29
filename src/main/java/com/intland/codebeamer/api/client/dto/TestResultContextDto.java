@@ -4,11 +4,14 @@
  */
 package com.intland.codebeamer.api.client.dto;
 
-public class TestResultConfigurationDto {
+public class TestResultContextDto {
     private Integer testConfigurationId;
     private Integer testCaseTrackerId;
     private Integer testSetTrackerId;
     private Integer testRunTrackerId;
+    private String buildIdentifier;
+
+    private int numberOfTestResults;
 
     public Integer getTestConfigurationId() {
         return testConfigurationId;
@@ -40,5 +43,21 @@ public class TestResultConfigurationDto {
 
     public void setTestRunTrackerId(Integer testRunTrackerId) {
         this.testRunTrackerId = testRunTrackerId;
+    }
+
+    public String getBuildIdentifier() {
+        return buildIdentifier;
+    }
+
+    public void setBuildIdentifier(String buildIdentifier) {
+        this.buildIdentifier = buildIdentifier;
+    }
+
+    public int getNumberOfTestResults() {
+        return numberOfTestResults;
+    }
+
+    public void setNumberOfTestResults(int numberOfTestResults) {
+        this.numberOfTestResults = numberOfTestResults;
     }
 }

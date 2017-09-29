@@ -1,5 +1,5 @@
 plugins {
-    id "com.github.johnrengelman.shadow" version "2.0.1"
+    id "com.github.johnrengelman.shadow" version "2.0.1" //fat jar
     id "application"
     id "maven-publish"
     id "java"
@@ -53,6 +53,6 @@ test {
 }
 
 run {
-    mainClassName = "com.codebeamer.api.client.Client"
-    args "-p", "src/test/resources/test_results"
+    mainClassName = "com.intland.codebeamer.api.client.Client"
+    args "-p", "src/test/resources/test_results", "-u", "https://codebeamer.com/cb", "-U", "<username>", "-P", "<password>"
 }

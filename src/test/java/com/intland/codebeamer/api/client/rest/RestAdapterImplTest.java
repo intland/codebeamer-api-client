@@ -1,11 +1,14 @@
 package com.intland.codebeamer.api.client.rest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.intland.codebeamer.api.client.CodebeamerApiConfiguration;
-import com.intland.codebeamer.api.client.Version;
-import com.intland.codebeamer.api.client.dto.TrackerDto;
-import com.intland.codebeamer.api.client.dto.TrackerItemDto;
-import com.intland.codebeamer.api.client.dto.TrackerTypeDto;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.when;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.List;
+
 import org.apache.commons.codec.Charsets;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
@@ -16,7 +19,6 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
-import org.apache.log4j.Logger;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.testng.Assert;
@@ -24,15 +26,14 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.List;
-
-import static org.mockito.Mockito.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.intland.codebeamer.api.client.CodebeamerApiConfiguration;
+import com.intland.codebeamer.api.client.Version;
+import com.intland.codebeamer.api.client.dto.TrackerDto;
+import com.intland.codebeamer.api.client.dto.TrackerItemDto;
+import com.intland.codebeamer.api.client.dto.TrackerTypeDto;
 
 public class RestAdapterImplTest {
-    private static Logger logger = Logger.getLogger(RestAdapterImplTest.class);
     private HttpClient clientMock;
     private HttpResponse responseMock;
     private StatusLine statusLineMock;
@@ -51,7 +52,7 @@ public class RestAdapterImplTest {
                 .withPassword("007")
                 .withTestConfigurationId(10)
                 .withTestCaseTrackerId(20)
-                .withTestSetTrackerId(30)
+                .withReleaseId(30)
                 .withTestRunTrackerId(40);
     }
 
@@ -297,7 +298,8 @@ public class RestAdapterImplTest {
         String body = IOUtils.toString(entity.getContent(), Charsets.UTF_8);
         CodebeamerApiConfiguration config = CodebeamerApiConfiguration.getInstance();
         Assert.assertTrue(body.contains(String.format("\"testConfigurationId\":%s", config.getTestConfigurationId())), "testConfigurationId is included");
-        Assert.assertTrue(body.contains(String.format("\"testSetTrackerId\":%s", config.getTestSetTrackerId())), "testSetTrackerId is included");
+        Assert.assertTrue(body.contains(String.format("\"testCaseId\":%s", config.getTestCaseId())), "testCaseId is included");
+        Assert.assertTrue(body.contains(String.format("\"releaseId\":%s", config.getReleaseId())), "releaseId is included");
         Assert.assertTrue(body.contains(String.format("\"testCaseTrackerId\":%s", config.getTestCaseTrackerId())), "testCaseTrackerId is included");
         Assert.assertTrue(body.contains(String.format("\"testRunTrackerId\":%s", config.getTestRunTrackerId())), "testRunTrackerId is included");
     }

@@ -5,7 +5,10 @@
 package com.intland.codebeamer.api.client.rest;
 
 public class InvalidCredentialsException extends RequestFailed {
-    public InvalidCredentialsException(String message) {
+    
+	private static final long serialVersionUID = -3075316091329113522L;
+
+	public InvalidCredentialsException(String message) {
         super(message);
     }
 

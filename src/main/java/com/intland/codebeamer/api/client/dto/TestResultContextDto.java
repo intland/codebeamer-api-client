@@ -7,9 +7,11 @@ package com.intland.codebeamer.api.client.dto;
 public class TestResultContextDto {
     private Integer testConfigurationId;
     private Integer testCaseTrackerId;
-    private Integer testSetTrackerId;
+    private Integer testCaseId;
+    private Integer releaseId;
     private Integer testRunTrackerId;
     private String buildIdentifier;
+    private String defaultPackagePrefix;
 
     private int numberOfTestResults;
 
@@ -28,13 +30,21 @@ public class TestResultContextDto {
     public void setTestCaseTrackerId(Integer testCaseTrackerId) {
         this.testCaseTrackerId = testCaseTrackerId;
     }
-
-    public Integer getTestSetTrackerId() {
-        return testSetTrackerId;
+	
+	public Integer getTestCaseId() {
+        return testCaseId;
     }
 
-    public void setTestSetTrackerId(Integer testSetTrackerId) {
-        this.testSetTrackerId = testSetTrackerId;
+    public void setTestCaseId(Integer testCaseId) {
+        this.testCaseId = testCaseId;
+    }
+
+    public Integer getReleaseId() {
+        return releaseId;
+    }
+
+    public void setReleaseId(Integer releaseId) {
+        this.releaseId = releaseId;
     }
 
     public Integer getTestRunTrackerId() {
@@ -60,4 +70,12 @@ public class TestResultContextDto {
     public void setNumberOfTestResults(int numberOfTestResults) {
         this.numberOfTestResults = numberOfTestResults;
     }
+
+	public String getDefaultPackagePrefix() {
+		return defaultPackagePrefix;
+	}
+
+	public void setDefaultPackagePrefix(String defaultPackagePrefix) {
+		this.defaultPackagePrefix = defaultPackagePrefix;
+	}
 }

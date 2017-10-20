@@ -5,7 +5,10 @@
 package com.intland.codebeamer.api.client.rest;
 
 public class ConnectionFailedException extends RequestFailed {
-    public ConnectionFailedException(String message) {
+    
+	private static final long serialVersionUID = 7918920227424286471L;
+
+	public ConnectionFailedException(String message) {
         super(message);
     }
 

@@ -14,8 +14,10 @@ public class CodebeamerApiConfiguration {
 
     private Integer testConfigurationId;
     private Integer testCaseTrackerId;
-    private Integer testSetTrackerId;
+    private Integer testCaseId;
+    private Integer releaseId;
     private Integer testRunTrackerId;
+    private String defaultPackagePrefix;
 
     private String buildIdentifier;
 
@@ -75,15 +77,29 @@ public class CodebeamerApiConfiguration {
         return this;
     }
 
-    public Integer getTestSetTrackerId() {
-        return testSetTrackerId;
+	public Integer getTestCaseId() {
+        return testCaseId;
     }
 
-    public CodebeamerApiConfiguration withTestSetTrackerId(Integer id) {
-        this.testSetTrackerId = id;
+    public CodebeamerApiConfiguration withTestCaseId(Integer id) {
+        this.testCaseId = id;
+        return this;
+    }
+	
+    public Integer getReleaseId() {
+        return releaseId;
+    }
+
+    public CodebeamerApiConfiguration withReleaseId(Integer id) {
+        this.releaseId = id;
         return this;
     }
 
+    public CodebeamerApiConfiguration withDefaultPackagePrefix(String defaultPackagePrefix) {
+    	this.defaultPackagePrefix = defaultPackagePrefix;
+    	return this;
+    }
+    
     public Integer getTestRunTrackerId() {
         return testRunTrackerId;
     }
@@ -106,9 +122,11 @@ public class CodebeamerApiConfiguration {
         TestResultContextDto configurationDto = new TestResultContextDto();
         configurationDto.setTestConfigurationId(testConfigurationId);
         configurationDto.setTestCaseTrackerId(testCaseTrackerId);
-        configurationDto.setTestSetTrackerId(testSetTrackerId);
+        configurationDto.setTestCaseId(testCaseId);
+        configurationDto.setReleaseId(releaseId);
         configurationDto.setTestRunTrackerId(testRunTrackerId);
         configurationDto.setBuildIdentifier(buildIdentifier);
+        configurationDto.setDefaultPackagePrefix(defaultPackagePrefix);
         return configurationDto;
     }
 }

@@ -7,7 +7,10 @@ package com.intland.codebeamer.api.client.rest;
 import java.io.IOException;
 
 public class RequestFailed extends IOException {
-    public RequestFailed(String message) {
+    
+	private static final long serialVersionUID = -4747489985951427754L;
+
+	public RequestFailed(String message) {
         super(message);
     }
 

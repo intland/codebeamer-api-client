@@ -1,5 +1,17 @@
 package com.intland.codebeamer.api.client;
 
+import static org.mockito.Mockito.mock;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
@@ -9,19 +21,8 @@ import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
-import static org.mockito.Mockito.mock;
-
 public class XUnitFileCollectorTest {
 
-    private static Logger logger = Logger.getLogger(XUnitFileCollectorTest.class);
     File dirWithNonXmlFile;
     File emptyDir;
     File dirWithOneFile;
@@ -92,47 +93,55 @@ public class XUnitFileCollectorTest {
     }
 
     private File getTestResultDirWithSubDirs() throws IOException {
-        Path tempDir = Files.createTempDirectory("dir_with_subdirs_");
-        Path sub1 = Files.createDirectory(Paths.get(tempDir + "/sub1"));
-        Path sub2 = Files.createDirectory(Paths.get(tempDir + "/sub2"));
-        logger.debug(tempDir);
-
-        Files.copy(Paths.get(ClassLoader.getSystemResource("test_results/ArtifactRemotingTests.xml").getPath()), Paths.get(tempDir + "/ArtifactRemotingTests.xml"), REPLACE_EXISTING);
-        Files.copy(Paths.get(ClassLoader.getSystemResource("test_results/GeneralRemotingTests.xml").getPath()), Paths.get(sub1 + "/GeneralRemotingTests.xml"), REPLACE_EXISTING);
-        Files.copy(Paths.get(ClassLoader.getSystemResource("test_results/TestManagementRemotingTests.xml").getPath()), Paths.get(sub2 + "/TestManagementRemotingTests.xml"), REPLACE_EXISTING);
-
-        return tempDir.toFile();
+    	File dir = createTempDir("dir_with_subdirs_", new File(System.getProperty("java.io.tmpdir")));
+    	copyFiles(dir, new HashSet<String>(Arrays.asList(new String[] {"ArtifactRemotingTests.xml"})));
+    	File subDir1 = createTempDir("sub1", dir);
+        copyFiles(subDir1, new HashSet<String>(Arrays.asList(new String[] {"GeneralRemotingTests.xml"})));
+    	File subDir2 = createTempDir("sub2", dir);
+    	subDir2.mkdir();
+        copyFiles(subDir2, new HashSet<String>(Arrays.asList(new String[] {"TestManagementRemotingTests.xml"})));
+        return dir;
     }
 
     private File getTestResultDirWithSixFiles() throws IOException {
-        Path tempDir = Files.createTempDirectory("dir_with_six_files_");
-        logger.debug(tempDir);
-        Files.copy(Paths.get(ClassLoader.getSystemResource("test_results/ArtifactRemotingTests.xml").getPath()), Paths.get(tempDir + "/ArtifactRemotingTests.xml"), REPLACE_EXISTING);
-        Files.copy(Paths.get(ClassLoader.getSystemResource("test_results/GeneralRemotingTests.xml").getPath()), Paths.get(tempDir + "/GeneralRemotingTests.xml"), REPLACE_EXISTING);
-        Files.copy(Paths.get(ClassLoader.getSystemResource("test_results/TestManagementRemotingTests.xml").getPath()), Paths.get(tempDir + "/TestManagementRemotingTests.xml"), REPLACE_EXISTING);
-        Files.copy(Paths.get(ClassLoader.getSystemResource("test_results/TrackerItemAttachmentRemotingTests.xml").getPath()), Paths.get(tempDir + "/TrackerItemAttachmentRemotingTests.xml"), REPLACE_EXISTING);
-        Files.copy(Paths.get(ClassLoader.getSystemResource("test_results/TrackerItemRemotingTests.xml").getPath()), Paths.get(tempDir + "/TrackerItemRemotingTests.xml"), REPLACE_EXISTING);
-        Files.copy(Paths.get(ClassLoader.getSystemResource("test_results/WikiPageRemotingTests.xml").getPath()), Paths.get(tempDir + "/WikiPageRemotingTests.xml"), REPLACE_EXISTING);
-        return tempDir.toFile();
+    	File dir = createTempDir("dir_with_six_files_", new File(System.getProperty("java.io.tmpdir")));
+        copyFiles(dir, new HashSet<String>(Arrays.asList(new String[] {"ArtifactRemotingTests.xml", "GeneralRemotingTests.xml", "TestManagementRemotingTests.xml", "TrackerItemAttachmentRemotingTests.xml", "TrackerItemRemotingTests.xml", "WikiPageRemotingTests.xml"})));
+        return dir;
     }
 
     private File getTestResultDirWithOneFile() throws IOException {
-        Path tempDir = Files.createTempDirectory("dir_with_one_file_");
-        logger.debug(tempDir);
-        Files.copy(Paths.get(ClassLoader.getSystemResource("test_results/AclRemotingTests.xml").getPath()), Paths.get(tempDir + "/AclRemotingTests.xml"), REPLACE_EXISTING);
-        return tempDir.toFile();
+    	File dir = createTempDir("dir_with_one_file_", new File(System.getProperty("java.io.tmpdir")));
+        copyFiles(dir, new HashSet<String>(Arrays.asList(new String[] {"AclRemotingTests.xml"})));
+        return dir;
     }
 
     private File getEmptyDir() throws IOException {
-        Path tempDir = Files.createTempDirectory("empty_dir_");
-        logger.debug(tempDir);
-        return tempDir.toFile();
+        return createTempDir("empty_dir_", new File(System.getProperty("java.io.tmpdir")));
     }
 
     private File getDirWithNonXmlFile() throws IOException {
-        Path tempDir = Files.createTempDirectory("dir_with_non_xml_file_");
-        logger.debug(tempDir);
-        Files.copy(Paths.get(ClassLoader.getSystemResource("test_results/not_a_result.txt").getPath()), Paths.get(tempDir + "/not_a_result.txt"), REPLACE_EXISTING);
-        return tempDir.toFile();
+    	File dir = createTempDir("dir_with_non_xml_file_", new File(System.getProperty("java.io.tmpdir")));
+    	copyFiles(dir, new HashSet<String>(Arrays.asList("not_a_result.txt")));
+    	return dir;
+    }
+    
+    private void copyFiles(File outputDirectory, Set<String> fileNames) throws IOException {
+    	
+        for (String fileName : fileNames) {
+        	File outputFile = new File(outputDirectory, fileName);
+            if (outputFile.exists()) {
+            	outputFile.delete();
+            }
+            IOUtils.copy(new FileInputStream(new File(ClassLoader.getSystemResource(String.format("test_results/%s", fileName)).getPath())), new FileOutputStream(outputFile));
+        }
+    }
+    
+    private File createTempDir(String name, File parent) {
+    	File dir = new File(parent, name);
+        if (dir.exists()) {
+        	dir.delete();
+        }
+        dir.mkdir();
+        return dir;
     }
 }

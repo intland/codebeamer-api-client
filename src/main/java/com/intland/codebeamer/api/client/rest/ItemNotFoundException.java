@@ -5,7 +5,10 @@
 package com.intland.codebeamer.api.client.rest;
 
 public class ItemNotFoundException extends RequestFailed {
-    public ItemNotFoundException(String message) {
+    
+	private static final long serialVersionUID = 2336965684196924424L;
+
+	public ItemNotFoundException(String message) {
         super(message);
     }
 

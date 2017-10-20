@@ -13,9 +13,6 @@ public class Version {
     private Integer build;
     private Integer revision;
 
-    private Version() {
-    }
-
     public Version(Integer major, Integer minor, Integer build, Integer revision) {
         this.major = major;
         this.minor = minor;

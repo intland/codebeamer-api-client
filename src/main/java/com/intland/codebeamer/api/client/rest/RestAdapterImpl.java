@@ -35,8 +35,9 @@ import java.util.HashSet;
 
 public class RestAdapterImpl implements RestAdapter {
 
-    private static final int TIMEOUT = 500;
+    private static final int TIMEOUT = 5000;
     private static final String REST_PATH = "/rest";
+    private static final int ATTEMPT_THRESHLD = 3;
 
     private static Logger logger = Logger.getLogger(RestAdapter.class);
     private ObjectMapper objectMapper = new ObjectMapper();
@@ -189,21 +190,30 @@ public class RestAdapterImpl implements RestAdapter {
         assert client != null;
         logger.debug(String.format("%s-request to %s", request.getMethod(), request.getURI()));
         HttpResponse response = null;
-        try {
-            response = client.execute(request);
-            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
-                throw new InvalidCredentialsException("incorrect credentials");
-            }
-            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_NOT_FOUND) {
-                throw new ItemNotFoundException("cannot find item");
-            }
-            return new BasicResponseHandler().handleResponse(response);
-        } catch (RequestFailed ex) {
-            throw ex;
-        } catch (IOException ex) {
-            throw new ConnectionFailedException(String.format("%s-request to %s timed out", request.getConfig(), request.getURI()), ex);
-        } finally {
-            request.releaseConnection();
+        int attempt = 1;
+        while (true) {
+	        try {
+	            response = client.execute(request);
+	            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
+	                throw new InvalidCredentialsException("incorrect credentials");
+	            }
+	            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_NOT_FOUND) {
+	                throw new ItemNotFoundException("cannot find item");
+	            }
+	            return new BasicResponseHandler().handleResponse(response);
+	        } catch (InvalidCredentialsException icex) {
+	        	throw icex;
+	        } catch (ItemNotFoundException infex) {
+	        	throw infex;
+	        } catch (IOException ex) {
+	        	if (attempt == ATTEMPT_THRESHLD) {
+	        		throw new ConnectionFailedException(String.format("%s-request to %s timed out", request.getConfig(), request.getURI()), ex);
+	        	}
+	        	logger.warn(String.format("%s-request to %s timed out, this was the %s. attempt of %s", request.getConfig(), request.getURI(), (attempt), ATTEMPT_THRESHLD));
+	        	++attempt;
+	        } finally {
+	            request.releaseConnection();
+	        }
         }
     }
 }

@@ -35,7 +35,6 @@ import java.util.HashSet;
 
 public class RestAdapterImpl implements RestAdapter {
 
-    private static final int TIMEOUT = 5000;
     private static final String REST_PATH = "/rest";
     private static final int ATTEMPT_THRESHLD = 3;
 
@@ -53,7 +52,6 @@ public class RestAdapterImpl implements RestAdapter {
     private RequestConfig buildRequestConfig() {
         return RequestConfig
                 .custom()
-                .setConnectTimeout(TIMEOUT)
                 .build();
     }
 
@@ -162,9 +160,11 @@ public class RestAdapterImpl implements RestAdapter {
             multipartEntityBuilder.addBinaryBody(file.getName(), file);
         }
 
+        RequestConfig requestConfigForUpload = RequestConfig.custom().setConnectTimeout(5000).setConnectionRequestTimeout(5000).setSocketTimeout(1000 * 60 * 20).build();
+        
         HttpEntity entity = multipartEntityBuilder.build();
         try {
-            executePost(uri, entity);
+            executePost(uri, entity, requestConfigForUpload);
         } catch (RequestFailed ex) {
             logger.error(ex);
             throw ex;
@@ -178,9 +178,9 @@ public class RestAdapterImpl implements RestAdapter {
         return executeRest(get);
     }
 
-    private String executePost(String uri, HttpEntity entity) throws RequestFailed {
+    private String executePost(String uri, HttpEntity entity, RequestConfig requestConfig) throws RequestFailed {
         HttpPost post = new HttpPost(CodebeamerApiConfiguration.getInstance().getUri() + uri);
-        post.setConfig(requestConfig);
+        post.setConfig(requestConfig == null ? this.requestConfig : requestConfig);
         post.setEntity(entity);
 
         return executeRest(post);
